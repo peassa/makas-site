@@ -2,6 +2,7 @@
 // Metinler: i18n.js (scripts/site-olustur.py üretir). Ayarlar: config.js.
 (() => {
   window.makasReady = true;
+  document.documentElement.classList.add('js');
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
