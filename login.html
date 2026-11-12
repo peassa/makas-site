@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Log in — Makas AI</title>
+<meta name="description" content="Makas AI is the editing assistant that lives inside Premiere Pro and DaVinci Resolve: silence cuts, captions, color and effects in a few clicks.">
+<meta property="og:title" content="Makas AI — Cut the boring part.">
+<meta property="og:description" content="The AI editing assistant for Premiere Pro and DaVinci Resolve.">
+<meta name="theme-color" content="#07060c">
+<link rel="icon" href="assets/favicon.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="curtain t"></div><div class="curtain b"></div>
+<div class="progress" id="progress"></div>
+<div class="bg"><i class="a"></i><i class="b"></i><i class="c"></i><div class="grid"></div></div>
+<div class="grain"></div>
+<header class="nav" id="nav"><div class="wrap">
+<a class="brand" href="index.html"><img src="assets/logo.png" alt="Makas AI" width="36" height="36"><span>Makas</span><em>AI</em></a>
+<nav>
+<a href="index.html#demo" data-i18n="nav.demo">See it work</a>
+<a href="index.html#features" data-i18n="nav.features">Features</a>
+<a href="index.html#color" data-i18n="nav.color">Color</a>
+<a href="index.html#pricing" data-i18n="nav.pricing">Pricing</a>
+<a href="index.html#faq" data-i18n="nav.faq">FAQ</a>
+</nav>
+<span class="sp"></span>
+<div class="lang" id="lang"><button data-lang="en">EN</button><button data-lang="tr">TR</button></div>
+<a class="login" href="login.html" data-i18n="nav.login" data-auth="out">Log in</a>
+<a class="btn primary sm" href="signup.html" data-auth-cta><span data-i18n="nav.cta">Start free</span></a>
+<button class="burger" id="burger" aria-label="Menu"><svg class="ic" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M4 5h16" /> <path d="M4 12h16" /> <path d="M4 19h16" /> </svg></button>
+</div></header>
+<main class="auth"><form class="panel fade-up" id="loginForm" novalidate>
+<h1 data-i18n="au.login.h">Welcome back.</h1><p class="lead" data-i18n="au.login.p">Sign in to manage your plan and devices.</p>
+<label class="field"><span data-i18n="au.email">Email</span><input type="email" name="email" autocomplete="email" required placeholder="you@studio.com"></label>
+<label class="field"><span data-i18n="au.pass">Password</span><input type="password" name="password" autocomplete="current-password" required minlength="8" placeholder="••••••••"></label>
+<div class="msg" id="msg"></div>
+<button class="btn primary block" type="submit"><span data-i18n="au.login.btn">Log in</span><svg class="ic" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /> </svg></button>
+<p class="alt"><a href="reset.html" data-i18n="au.forgot">Forgot your password?</a></p>
+<p class="alt"><span data-i18n="au.noacc">New to Makas?</span> <a href="signup.html" data-i18n="au.create">Create an account</a></p>
+</form></main><footer><div class="wrap">
+<a class="brand" href="index.html"><img src="assets/logo.png" alt="" width="36" height="36"><span>Makas</span><em>AI</em></a>
+<nav><a href="index.html#features" data-i18n="nav.features">Features</a><a href="index.html#pricing" data-i18n="nav.pricing">Pricing</a><a href="index.html#faq" data-i18n="nav.faq">FAQ</a><a href="login.html" data-i18n="nav.login">Log in</a><a href="https://instagram.com/makasai.co" rel="noopener">Instagram</a></nav>
+<span style="flex:1"></span><span>© <span id="year"></span> Makas AI</span>
+</div></footer>
+<script src="config.js"></script><script src="i18n.js"></script><script src="app.js"></script>
+<script src="auth.js"></script></body></html>
