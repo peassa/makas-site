@@ -39,6 +39,7 @@
       el.placeholder = lang === 'tr' && T[el.dataset.i18nPh] ? T[el.dataset.i18nPh] : el.dataset.ph;
     }
     for (const b of $$('#lang button')) b.classList.toggle('on', b.dataset.lang === lang);
+    for (const el of $$('[data-lang-block]')) el.hidden = el.dataset.langBlock !== lang;
     store.set('makas-lang', lang);
     document.dispatchEvent(new CustomEvent('makas-lang', { detail: lang }));
   }

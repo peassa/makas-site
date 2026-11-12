@@ -7,6 +7,14 @@
 <meta name="description" content="Makas AI is the editing assistant that lives inside Premiere Pro and DaVinci Resolve: silence cuts, captions, color and effects in a few clicks.">
 <meta property="og:title" content="Makas AI — Cut the boring part.">
 <meta property="og:description" content="The AI editing assistant for Premiere Pro and DaVinci Resolve.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://makasai.net/">
+<meta property="og:image" content="https://makasai.net/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://makasai.net/assets/og.jpg">
+<link rel="apple-touch-icon" href="assets/logo.png">
 <meta name="theme-color" content="#07060c">
 <link rel="icon" href="assets/favicon.png">
 <link rel="stylesheet" href="styles.css">
@@ -61,10 +69,19 @@
 <div class="meta fade-up d4"><span><svg class="ic" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 6 9 17l-5-5" /> </svg><span data-i18n="hero.m1">No card needed</span></span><span><svg class="ic" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 6 9 17l-5-5" /> </svg><span data-i18n="hero.m2">Runs on your computer</span></span><span><svg class="ic" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 6 9 17l-5-5" /> </svg><span data-i18n="hero.m3">macOS &amp; Windows</span></span></div>
 </div>
 <div class="stage" id="stage">
-<div class="stack" id="stack"><div class="float">
-<div class="win w1"><img src="assets/screens/effects.jpg" alt="Makas effects menu"></div>
-<div class="win w2"><img src="assets/screens/captions.jpg" alt="Makas caption styles"></div>
-<div class="win w3"><img src="assets/screens/color.jpg" alt="Makas color tools"></div>
+<div class="ed-wrap" id="stack"><div class="ed" role="img" aria-label="Makas panel docked inside a video editor">
+<div class="ed-bar"><i></i><i></i><i></i><span>Timeline 1</span><em><svg class="ic" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="6" cy="6" r="3" /> <path d="M8.12 8.12 12 12" /> <path d="M20 4 8.12 15.88" /> <circle cx="6" cy="18" r="3" /> <path d="M14.8 14.8 20 20" /> </svg>Makas</em></div>
+<div class="ed-body">
+<div class="ed-main">
+<div class="ed-viewer"><svg viewBox="0 0 1600 760" preserveAspectRatio="xMidYMid slice"><use href="#scene"/></svg><span class="ed-tc">01:00:12:08</span><div class="ed-cap"><span>nobody</span> <span>tells</span> <span>you</span></div></div>
+<div class="ed-tl"><div class="ed-ph"></div>
+<div class="ed-row c" data-l="CC"><i style="--x:1%;--w:13%"><span>So here is</span></i><i style="--x:16%;--w:19%"><span>the thing about</span></i><i style="--x:37%;--w:10%"><span>editing</span></i><i style="--x:49%;--w:21%"><span>nobody tells you</span></i><i style="--x:72%;--w:12%"><span>it takes</span></i><i style="--x:86%;--w:13%"><span>time</span></i></div>
+<div class="ed-row v" data-l="V1"><i style="--x:0%;--w:15%"></i><i style="--x:16%;--w:20%"></i><i style="--x:37%;--w:11%"></i><i style="--x:49%;--w:22%"></i><i style="--x:72%;--w:13%"></i><i style="--x:86%;--w:14%"></i></div>
+<div class="ed-row a" data-l="A1"><i style="--x:0%;--w:15%"></i><i style="--x:16%;--w:20%"></i><i style="--x:37%;--w:11%"></i><i style="--x:49%;--w:22%"></i><i style="--x:72%;--w:13%"></i><i style="--x:86%;--w:14%"></i></div>
+</div>
+</div>
+<div class="ed-panel"><img src="assets/screens/home.jpg" alt="Makas panel"></div>
+</div>
 </div></div>
 <span class="chip3d c1"><svg class="ic" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="6" cy="6" r="3" /> <path d="M8.12 8.12 12 12" /> <path d="M20 4 8.12 15.88" /> <circle cx="6" cy="18" r="3" /> <path d="M14.8 14.8 20 20" /> </svg><span data-i18n="chip.cut">Silence cut</span></span>
 <span class="chip3d c2"><svg class="ic" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="18" height="14" x="3" y="5" rx="2" ry="2" /> <path d="M7 15h4M15 15h2M7 11h2M13 11h4" /> </svg><span data-i18n="chip.cap">Captions</span></span>
@@ -140,7 +157,7 @@
 <div class="plan rv"><h3 data-i18n="pr.trial.t">Free trial</h3><div class="desc" data-i18n="pr.trial.d">Try the full product for a week.</div><div class="price"><b id="trialPrice">$0</b><span data-i18n="pr.trial.per">for 7 days</span></div><div class="note"></div><ul><li><svg class="ic" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 6 9 17l-5-5" /> </svg><span data-i18n="pr.trial.l1">Every feature unlocked</span></li><li><svg class="ic" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 6 9 17l-5-5" /> </svg><span data-i18n="pr.trial.l2">No card required</span></li><li><svg class="ic" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 6 9 17l-5-5" /> </svg><span data-i18n="pr.trial.l3">Keep your projects and settings</span></li></ul><a class="btn ghost block" href="signup.html" data-i18n="pr.trial.cta">Start free</a></div>
 <div class="plan pro rv" style="--d:.1s"><span class="badge" data-i18n="pr.pro.badge">Most popular</span><h3>Makas Pro</h3><div class="desc" data-i18n="pr.pro.d">For editors who ship every week.</div><div class="price"><b id="price">—</b><span id="per" data-i18n="pr.per">per month</span></div><div class="note" id="priceNote"></div><ul><li><svg class="ic" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 6 9 17l-5-5" /> </svg><span data-i18n="pr.pro.l1">Everything in Makas, unlimited</span></li><li><svg class="ic" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 6 9 17l-5-5" /> </svg><span data-i18n="pr.pro.l2">Premiere Pro + DaVinci Resolve</span></li><li><svg class="ic" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 6 9 17l-5-5" /> </svg><span data-i18n="pr.pro.l3">2 devices per account</span></li><li><svg class="ic" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 6 9 17l-5-5" /> </svg><span data-i18n="pr.pro.l4">SFX library access</span></li><li><svg class="ic" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 6 9 17l-5-5" /> </svg><span data-i18n="pr.pro.l5">All future updates</span></li></ul><a class="btn primary block" href="signup.html?plan=pro" id="buy" data-magnet><span data-i18n="pr.pro.cta">Get Makas Pro</span><svg class="ic" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /> </svg></a></div>
 </div>
-<p class="fine rv" data-i18n="pr.fine">Secure checkout. Cancel anytime from your account page.</p>
+<p class="fine rv"><span data-i18n="pr.fine">Secure checkout. Cancel anytime from your account page.</span> <a href="refund.html" data-i18n="pr.refund" style="text-decoration:underline">14-day money-back guarantee</a></p>
 </div></section>
 
 <section id="faq"><div class="wrap center">
@@ -156,7 +173,7 @@
 </main>
 <footer><div class="wrap">
 <a class="brand" href="index.html"><img src="assets/logo.png" alt="" width="36" height="36"><span>Makas</span><em>AI</em></a>
-<nav><a href="index.html#features" data-i18n="nav.features">Features</a><a href="index.html#pricing" data-i18n="nav.pricing">Pricing</a><a href="index.html#faq" data-i18n="nav.faq">FAQ</a><a href="login.html" data-i18n="nav.login">Log in</a><a href="https://instagram.com/makasai.co" rel="noopener">Instagram</a></nav>
+<nav><a href="index.html#features" data-i18n="nav.features">Features</a><a href="index.html#pricing" data-i18n="nav.pricing">Pricing</a><a href="index.html#faq" data-i18n="nav.faq">FAQ</a><a href="login.html" data-i18n="nav.login">Log in</a><a href="https://instagram.com/makasai.co" rel="noopener">Instagram</a><a href="privacy.html" data-i18n="ft.privacy">Privacy</a><a href="terms.html" data-i18n="ft.terms">Terms</a><a href="refund.html" data-i18n="ft.refund">Refunds</a></nav>
 <span style="flex:1"></span><span>© <span id="year"></span> Makas AI</span>
 </div></footer>
 <script src="config.js"></script><script src="i18n.js"></script><script src="app.js"></script>

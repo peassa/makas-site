@@ -33,5 +33,6 @@ window.MAKAS_TR = {
   'au.login.h': 'Tekrar hoş geldiniz.', 'au.login.p': 'Planınızı ve cihazlarınızı yönetmek için giriş yapın.', 'au.email': 'E-posta', 'au.pass': 'Şifre', 'au.pass2': 'Şifre (tekrar)', 'au.pass.ph': 'En az 8 karakter', 'au.login.btn': 'Giriş yap', 'au.forgot': 'Şifrenizi mi unuttunuz?', 'au.noacc': 'Makas’ta yeni misiniz?', 'au.create': 'Hesap oluşturun',
   'au.signup.h': 'Ücretsiz haftanızı başlatın.', 'au.signup.p': '7 gün, tüm özellikler, kart yok.', 'au.signup.btn': 'Hesap oluştur', 'au.hasacc': 'Zaten hesabınız var mı?',
   'au.reset.h': 'Şifrenizi sıfırlayın.', 'au.reset.p': 'E-postanıza 6 haneli bir kod göndereceğiz.', 'au.reset.btn': 'Kod gönder', 'au.code': 'E-postadaki kod', 'au.newpass': 'Yeni şifre', 'au.back': 'Girişe dön',
+  'pr.refund': '14 gün koşulsuz iade', 'ft.privacy': 'Gizlilik', 'ft.terms': 'Kullanım Koşulları', 'ft.refund': 'İade',
   'ac.h': 'Hesabınız', 'ac.plan': 'Plan', 'ac.dl': 'Makas’ı indir', 'ac.dl.p': 'Eklentiyi kurun, ardından Premiere Pro ya da DaVinci Resolve içinde bu e-posta ve şifreyle giriş yapın.', 'ac.dev': 'Cihazlar', 'ac.sec': 'Güvenlik', 'ac.sec.p': 'Şifrenizi değiştirin ya da bu tarayıcıdan çıkış yapın.', 'ac.chg': 'Şifre değiştir', 'ac.out': 'Çıkış yap',
 };
