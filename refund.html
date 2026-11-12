@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Refunds — Makas AI</title>
-<meta name="description" content="Makas AI is the editing assistant that lives inside Premiere Pro and DaVinci Resolve: silence cuts, captions, color and effects in a few clicks.">
+<meta name="description" content="Makas AI is the editing assistant that lives inside Premiere Pro and DaVinci Resolve: silence cuts, captions, color and titles in a few clicks. Runs on your computer.">
 <meta property="og:title" content="Makas AI — Cut the boring part.">
 <meta property="og:description" content="The AI editing assistant for Premiere Pro and DaVinci Resolve.">
 <meta property="og:type" content="website">
@@ -15,29 +15,28 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://makasai.net/assets/og.jpg">
 <link rel="apple-touch-icon" href="assets/logo.png">
-<meta name="theme-color" content="#07060c">
+<meta name="theme-color" content="#060509">
 <link rel="icon" href="assets/favicon.png">
 <link rel="stylesheet" href="styles.css">
+<script>document.documentElement.classList.add('js');setTimeout(function(){if(!window.makasReady)document.documentElement.classList.remove('js')},3500)</script>
 </head>
 <body>
 <div class="curtain t"></div><div class="curtain b"></div>
 <div class="progress" id="progress"></div>
-<div class="bg"><i class="a"></i><i class="b"></i><i class="c"></i><div class="grid"></div></div>
-<div class="grain"></div>
+<div class="grain" aria-hidden="true"></div>
 <header class="nav" id="nav"><div class="wrap">
 <a class="brand" href="index.html"><img src="assets/logo.png" alt="Makas AI" width="36" height="36"><span>Makas</span><em>AI</em></a>
 <nav>
-<a href="index.html#demo" data-i18n="nav.demo">See it work</a>
-<a href="index.html#features" data-i18n="nav.features">Features</a>
-<a href="index.html#color" data-i18n="nav.color">Color</a>
+<a href="index.html#play" data-i18n="nav.play">Playground</a>
+<a href="index.html#more" data-i18n="nav.features">Features</a>
 <a href="index.html#pricing" data-i18n="nav.pricing">Pricing</a>
 <a href="index.html#faq" data-i18n="nav.faq">FAQ</a>
 </nav>
 <span class="sp"></span>
 <div class="lang" id="lang"><button data-lang="en">EN</button><button data-lang="tr">TR</button></div>
-<a class="login" href="login.html" data-i18n="nav.login" data-auth="out">Log in</a>
-<a class="btn primary sm" href="signup.html" data-auth-cta><span data-i18n="nav.cta">Start free</span></a>
-<button class="burger" id="burger" aria-label="Menu"><svg class="ic" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M4 5h16" /> <path d="M4 12h16" /> <path d="M4 19h16" /> </svg></button>
+<a class="login" href="login.html" data-auth="out" data-i18n="nav.login">Log in</a>
+<a class="btn primary sm" href="signup.html"><span data-i18n="nav.cta">Start free</span></a>
+<button class="burger" id="burger" aria-label="Menu"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M4 5h16" /> <path d="M4 12h16" /> <path d="M4 19h16" /> </svg></button>
 </div></header>
 <main class="legal"><article class="wrap"><div data-lang-block="en">
 <h1>Refund Policy</h1><p class="upd">Last updated: 12 November 2026</p>
@@ -66,9 +65,13 @@
 <h2>İptal</h2>
 <p>İptal, sonraki yenilemeleri durdurur. Ödediğiniz dönemin sonuna kadar kullanmaya devam edersiniz. 14 gün içindeyseniz ve iade de istiyorsanız talebinizde belirtin.</p>
 </div></article></main><footer><div class="wrap">
-<a class="brand" href="index.html"><img src="assets/logo.png" alt="" width="36" height="36"><span>Makas</span><em>AI</em></a>
-<nav><a href="index.html#features" data-i18n="nav.features">Features</a><a href="index.html#pricing" data-i18n="nav.pricing">Pricing</a><a href="index.html#faq" data-i18n="nav.faq">FAQ</a><a href="login.html" data-i18n="nav.login">Log in</a><a href="https://instagram.com/makasai.co" rel="noopener">Instagram</a><a href="privacy.html" data-i18n="ft.privacy">Privacy</a><a href="terms.html" data-i18n="ft.terms">Terms</a><a href="refund.html" data-i18n="ft.refund">Refunds</a></nav>
-<span style="flex:1"></span><span>© <span id="year"></span> Makas AI</span>
+<div class="ft-top">
+<div class="ft-brand"><a class="brand" href="index.html"><img src="assets/logo.png" alt="" width="36" height="36"><span>Makas</span><em>AI</em></a><p><span data-i18n="ft.tag">The editing assistant for Premiere Pro and DaVinci Resolve.</span></p></div>
+<nav><b><span data-i18n="ft.product">Product</span></b><a href="index.html#play" data-i18n="nav.play">Playground</a><a href="index.html#more" data-i18n="nav.features">Features</a><a href="index.html#pricing" data-i18n="nav.pricing">Pricing</a><a href="index.html#faq" data-i18n="nav.faq">FAQ</a></nav>
+<nav><b><span data-i18n="ft.account">Account</span></b><a href="login.html" data-i18n="nav.login">Log in</a><a href="signup.html" data-i18n="ft.signup">Create account</a><a href="https://instagram.com/makasai.co" rel="noopener">Instagram</a></nav>
+<nav><b><span data-i18n="ft.legal">Legal</span></b><a href="privacy.html" data-i18n="ft.privacy">Privacy</a><a href="terms.html" data-i18n="ft.terms">Terms</a><a href="refund.html" data-i18n="ft.refund">Refunds</a></nav>
+</div>
+<div class="ft-bot"><span>© <span id="year"></span> Makas AI</span><span><span data-i18n="ft.note">Premiere Pro and DaVinci Resolve are trademarks of their owners.</span></span></div>
 </div></footer>
 <script src="config.js"></script><script src="i18n.js"></script><script src="app.js"></script>
 </body></html>
