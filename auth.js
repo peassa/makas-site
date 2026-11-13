@@ -23,6 +23,15 @@
       }
     },
   };
+  /** Menüde plan ve kalan günü gösterebilmek için küçük özet (e-posta saklanmaz). */
+  const remember = (a) => window.makasStore?.set('makas-account', JSON.stringify({ plan: a.plan, until: a.until }));
+  const forget = () => {
+    try {
+      localStorage.removeItem('makas-account');
+    } catch {
+      /* yoksay */
+    }
+  };
   const soon = () => msg(tr() ? 'Hesaplar çok yakında açılıyor. Haberdar olmak için @makasai.co hesabını takip edin.' : 'Accounts open at launch. Follow @makasai.co to hear first.', 'info');
 
   async function post(path, body) {
@@ -57,6 +66,7 @@
     try {
       const r = await post('/web/register', { email, password: f.password.value, lang: lang() });
       session.set(r.session);
+      remember(r);
       const q = new URLSearchParams(location.search);
       location.href = q.get('plan') === 'pro' ? `account.html?buy=${q.get('period') || 'yearly'}` : 'account.html?welcome=1';
     } catch (err) {
@@ -76,6 +86,7 @@
     try {
       const r = await post('/web/login', { email: f.email.value.trim(), password: f.password.value });
       session.set(r.session);
+      remember(r);
       location.href = 'account.html';
     } catch (err) {
       msg(err.message);
@@ -105,6 +116,7 @@
           if (reset.password.value.length < 8) return msg(tr() ? 'Şifre en az 8 karakter olmalı.' : 'Password must be at least 8 characters.');
           const r = await post('/web/reset/finish', { email, code: reset.code.value.trim(), password: reset.password.value });
           session.set(r.session);
+          remember(r);
           location.href = 'account.html';
         }
       } catch (err) {
@@ -121,33 +133,84 @@
     const demo = !API;
     if (!demo && !session.get()) return void (location.href = 'login.html');
     const q = new URLSearchParams(location.search);
+    const DAY = 86400000;
+    const P = C.PRICES ?? { currency: '$', monthly: 12, yearly: 96 };
+    const money = (n) => `${P.currency}${Number.isInteger(n) ? n : n.toFixed(2)}`;
     const fmtDate = (ms) => new Date(ms).toLocaleDateString(tr() ? 'tr-TR' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+    let period = q.get('buy') === 'monthly' ? 'monthly' : 'yearly';
     function paint(a) {
+      if (!demo) remember(a);
       $('#accEmail').textContent = a.email;
       const pro = a.plan === 'pro';
       const trial = a.plan === 'trial';
+      const days = Math.max(0, Math.ceil((a.until - Date.now()) / DAY));
       $('#planPill').textContent = pro ? 'Pro' : trial ? (tr() ? 'Deneme' : 'Trial') : tr() ? 'Süresi doldu' : 'Expired';
-      $('#planText').textContent = pro
-        ? `${tr() ? 'Makas Pro etkin. Yenilenme:' : 'Makas Pro is active. Renews on'} ${fmtDate(a.until)}`
+
+      // Kalan süre: büyük ve net
+      $('#accStatus').hidden = false;
+      $('#accStatus').className = `acc-status ${a.plan}`;
+      $('#accDays').textContent = pro
+        ? tr() ? 'Makas Pro etkin' : 'Makas Pro is active'
         : trial
-          ? `${tr() ? 'Deneme süreniz şu tarihte biter:' : 'Your trial ends on'} ${fmtDate(a.until)}`
-          : tr()
-            ? 'Deneme süreniz bitti. Devam etmek için abone olun.'
-            : 'Your trial has ended. Subscribe to keep editing.';
-      $('#planBtnText').textContent = pro ? (tr() ? 'Aboneliği yönet' : 'Manage subscription') : tr() ? 'Makas Pro’ya geç' : 'Get Makas Pro';
+          ? tr() ? `Denemenizin bitmesine ${days} gün kaldı` : `${days} day${days === 1 ? '' : 's'} left in your trial`
+          : tr() ? 'Deneme süreniz bitti' : 'Your trial has ended';
+      $('#accUntil').textContent = pro
+        ? `${tr() ? 'Yenilenme:' : 'Renews on'} ${fmtDate(a.until)}`
+        : trial
+          ? `${tr() ? 'Bitiş:' : 'Ends on'} ${fmtDate(a.until)}`
+          : tr() ? 'Devam etmek için Makas Pro’ya geçin.' : 'Get Makas Pro to keep editing.';
+      $('#accBar').style.width = `${pro ? 100 : trial ? Math.min(100, (days / 7) * 100) : 0}%`;
+
+      // Plan: dönem seçimi ve satın alma
+      const canPay = a.payments !== false; // eski sunucu bu alanı göndermez: açık varsay
+      $('#planText').textContent = pro
+        ? tr() ? `Makas Pro${a.subPeriod ? (a.subPeriod === 'aylik' ? ' · aylık' : ' · yıllık') : ''}: tüm özellikler açık.` : `Makas Pro${a.subPeriod ? (a.subPeriod === 'aylik' ? ' · monthly' : ' · yearly') : ''}: every feature unlocked.`
+        : tr() ? 'Makas Pro: tüm özellikler, 2 cihaz, SFX kütüphanesi ve güncellemeler.' : 'Makas Pro: every feature, 2 devices, SFX library and updates.';
+      $('#plans').hidden = pro;
+      $('#pmPrice').textContent = `${money(P.monthly)}${tr() ? ' / ay' : ' / mo'}`;
+      $('#pyPrice').textContent = `${money(Math.round((P.yearly / 12) * 100) / 100)}${tr() ? ' / ay' : ' / mo'}`;
+      const save = Math.round((1 - P.yearly / (P.monthly * 12)) * 100);
+      $('#pySave').textContent = save > 0 ? `−${save}%` : '';
+      const pickPeriod = () => document.querySelectorAll('.acc-plan').forEach((b) => b.classList.toggle('on', b.dataset.period === period));
+      document.querySelectorAll('.acc-plan').forEach((b) => (b.onclick = () => ((period = b.dataset.period), pickPeriod())));
+      pickPeriod();
+      $('#planBtn').hidden = pro;
+      $('#planBtnText').textContent = canPay ? (tr() ? 'Makas Pro’ya geç' : 'Get Makas Pro') : tr() ? 'Ödeme yakında açılıyor' : 'Checkout opens soon';
+      $('#planBtn').style.opacity = canPay ? 1 : 0.55;
       $('#planBtn').onclick = async (e) => {
         e.preventDefault();
         if (demo) return soon();
+        if (!canPay) return msg(tr() ? 'Ödeme sayfası çok yakında açılıyor. Denemeniz bitmeden haber vereceğiz.' : 'Checkout opens very soon. We will let you know before your trial ends.', 'info');
         try {
-          const r = await post(pro ? '/portal' : '/checkout', { session: session.get(), period: q.get('buy') === 'monthly' ? 'aylik' : 'yillik' });
+          const r = await post('/checkout', { session: session.get(), period: period === 'monthly' ? 'aylik' : 'yillik' });
           location.href = r.url;
         } catch (err) {
           msg(err.message);
         }
       };
+
+      // Ödeme ve faturalar: kart bilgisi ödeme sağlayıcısında durur
+      const hasSub = pro && a.hasSubscription !== false;
+      $('#billText').textContent = hasSub
+        ? tr() ? 'Kartınızı değiştirin, faturalarınızı indirin ya da aboneliği iptal edin.' : 'Change your card, download invoices or cancel your subscription.'
+        : pro
+          ? tr() ? 'Bu hesaba süre elle tanımlandı; ödeme yöntemi yok.' : 'Access on this account was granted manually; there is no payment method.'
+          : tr() ? 'Henüz bir ödeme yönteminiz yok. Makas Pro’ya geçtiğinizde kartınız ve faturalarınız burada görünür.' : 'No payment method yet. Your card and invoices appear here once you get Makas Pro.';
+      $('#billBtn').hidden = !hasSub;
+      $('#billBtn').onclick = async (e) => {
+        e.preventDefault();
+        if (demo) return soon();
+        try {
+          const r = await post('/portal', { session: session.get() });
+          location.href = r.url;
+        } catch (err) {
+          msg(err.message);
+        }
+      };
+
       const list = $('#devices');
       list.innerHTML = '';
-      if (!a.devices?.length) list.innerHTML = `<p>${tr() ? 'Henüz cihaz yok. Eklentiyi kurup giriş yapınca burada görünür.' : 'No devices yet. They appear here after you sign in inside the plugin.'}</p>`;
+      if (!a.devices?.length) list.innerHTML = `<p>${tr() ? 'Henüz cihaz yok. Eklentiyi kurup giriş yapınca burada görünür (en fazla 2).' : 'No devices yet. They appear here after you sign in inside the plugin (up to 2).'}</p>`;
       for (const d of a.devices ?? []) {
         const row = document.createElement('div');
         row.className = 'dev';
@@ -173,15 +236,16 @@
         else el.onclick = (e) => (e.preventDefault(), msg(tr() ? 'İndirme bağlantısı yayın günü burada olacak.' : 'The download link will be here on launch day.', 'info'));
       }
       if (q.get('welcome')) msg(tr() ? 'Hoş geldiniz! 7 günlük denemeniz başladı. Şimdi eklentiyi indirin.' : 'Welcome! Your 7-day trial has started. Download the plugin next.', 'ok');
-      if (q.get('buy') && !pro && !demo) $('#planBtn').click();
+      if (q.get('buy') && !pro && !demo && canPay) $('#planBtn').click();
     }
     $('#logout').onclick = async () => {
       if (!demo) await post('/auth/logout', { session: session.get() }).catch(() => {});
       session.clear();
+      forget();
       location.href = 'index.html';
     };
     if (demo) {
-      paint({ email: 'you@studio.com', plan: 'trial', until: Date.now() + 7 * 86400000, devices: [{ id: 'x', name: 'MacBook Pro', platform: 'darwin' }] });
+      paint({ email: 'you@studio.com', plan: 'trial', until: Date.now() + 5 * DAY, devices: [{ id: 'x', name: 'MacBook Pro', platform: 'darwin' }] });
       msg(tr() ? 'Önizleme: hesaplar yayın günü açılacak. Buradaki bilgiler örnektir.' : 'Preview: accounts open at launch. The details below are sample data.', 'info');
     } else {
       post('/web/account', { session: session.get() })
@@ -189,6 +253,7 @@
         .catch((err) => {
           if (err.status === 401) {
             session.clear();
+            forget();
             location.href = 'login.html';
           } else msg(err.message);
         });

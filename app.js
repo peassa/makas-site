@@ -56,13 +56,41 @@
   window.makasT = (k, en) => (lang === 'tr' && T[k] != null ? T[k] : en);
   for (const b of $$('#lang button')) b.addEventListener('click', () => applyLang(b.dataset.lang));
 
-  // Oturum açıksa menüde "Hesabım"
-  if (store.get('makas-session')) {
-    for (const a of $$('[data-auth="out"]')) {
-      a.href = 'account.html';
-      a.dataset.i18n = 'nav.account';
-      a.textContent = 'My account';
+  // Oturum açıksa: menüde "Hesabım" (denemede kalan günle), kayıt düğmeleri hesaba götürür
+  const signedIn = Boolean(store.get('makas-session'));
+  if (signedIn) {
+    root.classList.add('in');
+    let acct = null;
+    try {
+      acct = JSON.parse(store.get('makas-account') || 'null');
+    } catch {
+      /* yoksay */
     }
+    const days = acct?.plan === 'trial' ? Math.max(0, Math.ceil((acct.until - Date.now()) / 86400000)) : null;
+    for (const a of $$('[data-auth="out"]')) a.hidden = true;
+    for (const a of $$('a[href^="signup.html"]')) {
+      const buy = a.id === 'buy';
+      a.href = buy ? 'account.html?buy=yearly' : 'account.html';
+      if (buy) continue; // "Makas Pro’ya geç" yazısı kalır, hesaptaki ödeme adımına gider
+      const label = a.querySelector('[data-i18n]') ?? (a.dataset.i18n ? a : null);
+      if (!label) continue;
+      const inNav = Boolean(a.closest('.nav'));
+      label.dataset.i18n = inNav ? 'nav.account' : 'cta.account';
+      label.textContent = inNav ? 'My account' : 'Go to my account';
+      if (inNav) {
+        a.classList.add('acct');
+        if (days != null) {
+          const chip = document.createElement('em');
+          chip.className = 'days';
+          chip.dataset.days = String(days);
+          a.append(chip);
+        }
+      }
+    }
+    const paintDays = () => {
+      for (const c of $$('.nav .days')) c.textContent = lang === 'tr' ? `${c.dataset.days} gün` : `${c.dataset.days} d`;
+    };
+    document.addEventListener('makas-lang', paintDays);
   }
 
   // ---------- Açılış perdesi, menü ----------
@@ -822,7 +850,7 @@
       $('#trialPrice').textContent = `${P.currency}0`;
       $('#priceNote').textContent = period === 'yearly' ? str('pr.billedY').replace('{p}', fmt(P.yearly)) : str('pr.billedM');
       $('#save').textContent = save > 0 ? `−${save}%` : '';
-      $('#buy').href = `signup.html?plan=pro&period=${period}`;
+      $('#buy').href = signedIn ? `account.html?buy=${period}` : `signup.html?plan=pro&period=${period}`;
       for (const b of $$('button', bill)) b.classList.toggle('on', b.dataset.p === period);
     };
     for (const b of $$('button', bill)) b.addEventListener('click', () => ((period = b.dataset.p), paint()));

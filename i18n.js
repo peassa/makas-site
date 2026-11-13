@@ -1,5 +1,7 @@
 // Bu dosyayı scripts/site-olustur.py üretir; elle düzenlemeyin.
 window.MAKAS_TR = {
+ "ac.bill": "Ödeme ve faturalar",
+ "ac.bill.btn": "Kartı ve faturaları yönet",
  "ac.chg": "Şifre değiştir",
  "ac.dev": "Cihazlar",
  "ac.dl": "Makas’ı indir",
@@ -7,6 +9,8 @@ window.MAKAS_TR = {
  "ac.h": "Hesabınız",
  "ac.out": "Çıkış yap",
  "ac.plan": "Plan",
+ "ac.pm": "Aylık",
+ "ac.py": "Yıllık",
  "ac.sec": "Güvenlik",
  "ac.sec.p": "Şifrenizi değiştirin ya da bu tarayıcıdan çıkış yapın.",
  "au.back": "Girişe dön",
@@ -50,6 +54,7 @@ window.MAKAS_TR = {
  "cs.neon": "Neon",
  "cs.one": "Tek kelime",
  "cs.pop": "Pop",
+ "cta.account": "Hesabıma git",
  "ed.busy": "Kurgulanıyor…",
  "ed.done": "Kurgu hazır",
  "ed.host": "Bağlı",
