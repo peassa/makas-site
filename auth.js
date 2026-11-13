@@ -237,7 +237,7 @@
         if (url) el.href = url;
         else el.onclick = (e) => (e.preventDefault(), msg(tr() ? 'İndirme bağlantısı yayın günü burada olacak.' : 'The download link will be here on launch day.', 'info'));
       }
-      if (q.get('notrial')) msg(tr() ? 'Hesabınız açıldı. Bu ağdan kısa sürede birden fazla deneme başlatıldığı için bu hesaba ücretsiz deneme tanımlanmadı. Makas Pro’ya geçerek hemen kullanabilirsiniz; bir yanlışlık varsa bize yazın.' : 'Your account is ready. Several free trials were recently started from this network, so this account has no free trial. You can start right away with Makas Pro; if this is a mistake, contact us.', 'info');
+      if (q.get('notrial')) msg(tr() ? 'Hesabınız açıldı. Bu internet bağlantısından son 30 gün içinde zaten bir ücretsiz deneme başlatıldığı için bu hesaba deneme tanımlanmadı. Makas Pro’ya geçerek hemen kullanabilirsiniz; bir yanlışlık varsa bize yazın.' : 'Your account is ready. A free trial was already started from this internet connection in the last 30 days, so this account has no free trial. You can start right away with Makas Pro; if this is a mistake, contact us.', 'info');
       if (q.get('welcome')) msg(tr() ? 'Hoş geldiniz! 7 günlük denemeniz başladı. Şimdi eklentiyi indirin.' : 'Welcome! Your 7-day trial has started. Download the plugin next.', 'ok');
       if (q.get('buy') && !pro && !demo && canPay) $('#planBtn').click();
     }
