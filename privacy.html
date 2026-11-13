@@ -49,6 +49,7 @@
 <ul>
 <li><b>Account:</b> your email address and a one-way hash of your password. We never see or store your password itself.</li>
 <li><b>Devices:</b> for each computer you sign in on, a random device ID, the computer name and the operating system. This enforces the two-device limit and lets you remove devices from your account page.</li>
+<li><b>Trial protection:</b> so that the free trial is used once per computer, we keep a one-way hash of your computer’s hardware ID and a one-way hash of the network address you signed up from. Neither can be turned back into the original value, and they are used only to detect repeated free trials.</li>
 <li><b>License:</b> your plan, trial and subscription dates, and when your license was last refreshed.</li>
 <li><b>Payments:</b> handled by Paddle, our reseller and Merchant of Record. Paddle processes your card and billing details; we receive only your subscription status and a customer ID.</li>
 <li><b>Support reports:</b> only if you choose to send us the diagnostic report from the plugin’s settings. It contains app versions, component status and recent errors, and no media.</li>
@@ -77,6 +78,7 @@
 <ul>
 <li><b>Hesap:</b> e-posta adresiniz ve şifrenizin tek yönlü özeti. Şifrenizin kendisini hiçbir zaman görmez, saklamayız.</li>
 <li><b>Cihazlar:</b> giriş yaptığınız her bilgisayar için rastgele bir cihaz kimliği, bilgisayar adı ve işletim sistemi. Bu bilgiler iki cihaz sınırını uygulamak ve hesap sayfanızdan cihaz çıkarabilmeniz için kullanılır.</li>
+<li><b>Deneme koruması:</b> ücretsiz denemenin her bilgisayarda bir kez kullanılması için bilgisayarınızın donanım kimliğinin tek yönlü özetini ve kayıt olduğunuz ağ adresinin tek yönlü özetini saklarız. İkisi de özgün değere geri çevrilemez ve yalnızca tekrarlanan ücretsiz denemeleri fark etmek için kullanılır.</li>
 <li><b>Lisans:</b> planınız, deneme ve abonelik tarihleriniz, lisansın son yenilendiği zaman.</li>
 <li><b>Ödemeler:</b> satıcımız ve resmi satış aracısı (Merchant of Record) Paddle tarafından yapılır. Kart ve fatura bilgilerinizi Paddle işler; bize yalnızca abonelik durumu ve bir müşteri kimliği gelir.</li>
 <li><b>Destek raporları:</b> yalnızca eklentinin ayarlarındaki tanılama raporunu bize göndermeyi seçerseniz. Raporda sürümler, bileşen durumları ve son hatalar bulunur; medya bulunmaz.</li>

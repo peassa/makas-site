@@ -26,7 +26,7 @@
     return d > 0 ? `${d} gün kaldı` : `${-d} gün önce bitti`;
   };
   const PLAN = { pro: 'Pro', trial: 'Deneme', expired: 'Süresi bitti' };
-  const EVENT = { kayit: 'Kayıt', 'satin-alma': 'Satın alma', yenileme: 'Yenileme', iptal: 'İptal', 'odeme-gecikti': 'Ödeme gecikti', 'admin-sure': 'Elle Pro süresi', 'admin-deneme': 'Deneme ayarlandı', 'admin-bitir': 'Erişim bitirildi', 'admin-cihaz': 'Cihaz çıkarıldı', 'admin-sil': 'Hesap silindi' };
+  const EVENT = { kayit: 'Kayıt', 'satin-alma': 'Satın alma', yenileme: 'Yenileme', iptal: 'İptal', 'odeme-gecikti': 'Ödeme gecikti', 'admin-sure': 'Elle Pro süresi', 'admin-deneme': 'Deneme ayarlandı', 'admin-bitir': 'Erişim bitirildi', 'admin-cihaz': 'Cihaz çıkarıldı', 'admin-sil': 'Hesap silindi', 'deneme-tekrar': 'Deneme reddedildi (aynı bilgisayar)', 'deneme-yok': 'Deneme verilmedi (aynı ağ)' };
   const PERIOD = { aylik: 'Aylık', yillik: 'Yıllık' };
 
   const show = (el, text, kind = 'err') => {
@@ -199,7 +199,7 @@
   overlay.addEventListener('click', (e) => e.target === overlay && close());
   addEventListener('keydown', (e) => e.key === 'Escape' && close());
   async function openUser(email) {
-    const { user: u, devices, events } = await api('user', { email });
+    const { user: u, devices, events, sameNetwork = [] } = await api('user', { email });
     modal.innerHTML = `
       <button class="adm-x" data-a="close" aria-label="Kapat">×</button>
       <h2>${esc(u.email)}</h2>
@@ -213,6 +213,7 @@
       </dl>
       <h3>Cihazlar (${devices.length}/2)</h3>
       <div class="adm-list">${devices.map((d) => `<div><span>${esc(d.name || 'Bilgisayar')} · ${d.platform === 'darwin' ? 'macOS' : d.platform === 'win32' ? 'Windows' : esc(d.platform || '')} · ${ago(d.lastSeen)}</span><button data-a="device" data-id="${esc(d.id)}">Çıkar</button></div>`).join('') || '<div class="muted">Henüz cihaz yok.</div>'}</div>
+      ${sameNetwork.length ? `<h3>Aynı ağdan açılan diğer hesaplar (${sameNetwork.length})</h3><div class="adm-list">${sameNetwork.map((m) => `<div><span>${esc(m)}</span><button data-a="open" data-email="${esc(m)}">Aç</button></div>`).join('')}</div>` : ''}
       <h3>İşlemler</h3>
       <div class="adm-actions">
         <label>Pro süresi ver <input type="number" id="grantDays" min="1" value="30"> gün <button class="btn primary sm" data-a="grant">Ver</button></label>
@@ -228,6 +229,7 @@
       const a = e.target.closest('[data-a]')?.dataset.a;
       if (!a) return;
       if (a === 'close') return close();
+      if (a === 'open') return openUser(e.target.dataset.email).catch(() => {});
       const m = $('#modalMsg');
       try {
         if (a === 'grant') await api('grant', { email, days: Number($('#grantDays').value) });
