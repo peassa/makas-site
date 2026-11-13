@@ -26,7 +26,7 @@
     return d > 0 ? `${d} gün kaldı` : `${-d} gün önce bitti`;
   };
   const PLAN = { pro: 'Pro', trial: 'Deneme', expired: 'Süresi bitti' };
-  const EVENT = { kayit: 'Kayıt', 'satin-alma': 'Satın alma', yenileme: 'Yenileme', iptal: 'İptal', 'odeme-gecikti': 'Ödeme gecikti', 'admin-sure': 'Elle Pro süresi', 'admin-deneme': 'Deneme ayarlandı', 'admin-bitir': 'Erişim bitirildi', 'admin-cihaz': 'Cihaz çıkarıldı', 'admin-sil': 'Hesap silindi', 'deneme-tekrar': 'Deneme reddedildi (aynı bilgisayar)', 'deneme-yok': 'Deneme verilmedi (aynı ağ)' };
+  const EVENT = { kayit: 'Kayıt', 'satin-alma': 'Satın alma', yenileme: 'Yenileme', iptal: 'İptal', 'odeme-gecikti': 'Ödeme gecikti', 'admin-sure': 'Elle Pro süresi', 'admin-deneme': 'Deneme ayarlandı', 'admin-bitir': 'Erişim bitirildi', 'admin-cihaz': 'Cihaz çıkarıldı', 'admin-sil': 'Hesap silindi', 'deneme-tekrar': 'Deneme reddedildi (aynı bilgisayar)', 'deneme-yok': 'Deneme verilmedi (aynı ağ)', 'admin-kayit': 'Kayıt kipi değişti' };
   const PERIOD = { aylik: 'Aylık', yillik: 'Yıllık' };
 
   const show = (el, text, kind = 'err') => {
@@ -270,7 +270,43 @@
     }),
   );
 
-  const loadAll = () => Promise.all([loadStats(), loadUsers(), loadEvents()]);
+  // Kayıt kipi: herkese açık / davet koduyla / kapalı
+  const GATE = { acik: 'Herkes kayıt olabilir', davet: 'Yalnızca davet koduyla', kapali: 'Yeni kayıt alınmıyor' };
+  let gateMode = 'acik';
+  const paintGate = (g) => {
+    gateMode = g.signup;
+    $$('#gateMode button').forEach((b) => b.classList.toggle('on', b.dataset.m === gateMode));
+    $('#gateCode').value = g.invite ?? '';
+    $('#gateCode').hidden = gateMode !== 'davet';
+    $('#gateState').textContent = GATE[gateMode];
+  };
+  async function loadGate() {
+    try {
+      paintGate(await api('settings'));
+    } catch (err) {
+      if (err.status === 403) throw err;
+      // Eski sunucu kodunda bu ayar yok
+      $('#gateState').textContent = 'Sunucu kodu güncellenince etkinleşir';
+      show($('#gateMsg'), 'Bu ayar için yeni sunucu kodunu Cloudflare’e yapıştırmanız gerekiyor. O zamana kadar kayıt yalnızca sitede kısıtlıdır.', 'info');
+    }
+  }
+  for (const b of $$('#gateMode button'))
+    b.addEventListener('click', () => {
+      gateMode = b.dataset.m;
+      $$('#gateMode button').forEach((x) => x.classList.toggle('on', x === b));
+      $('#gateCode').hidden = gateMode !== 'davet';
+    });
+  $('#gateSave').addEventListener('click', async () => {
+    try {
+      paintGate(await api('settings', { signup: gateMode, invite: $('#gateCode').value.trim().toUpperCase() }));
+      show($('#gateMsg'), 'Kaydedildi.', 'ok');
+      loadEvents().catch(() => {});
+    } catch (err) {
+      if (err.status === 403) return signOut('Oturum sona erdi; anahtarı yeniden yazın.');
+      show($('#gateMsg'), err.message);
+    }
+  });
+  const loadAll = () => Promise.all([loadStats(), loadUsers(), loadEvents(), loadGate()]);
   $('#refresh').addEventListener('click', guard(loadAll));
   if (key) {
     loadAll()

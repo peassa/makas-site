@@ -8,6 +8,9 @@ window.MAKAS = {
     monthly: 12, // aylık plan, ay başına
     yearly: 96, // yıllık plan, yıl başına
   },
+  // Kayıt kipi sunucudan okunur (yönetici paneli > Kayıtlar): 'acik' herkes, 'davet' davet koduyla, 'kapali' kimse.
+  // Sunucu yanıt vermezse ya da eski sürümse bu değer geçerlidir: güvenli tarafta kalmak için kapalı.
+  SIGNUP: 'kapali',
   // Kurulum dosyaları (hesap sayfasındaki indirme düğmeleri)
   DOWNLOADS: { mac: 'download/Makas-0.1.0.zip', win: 'download/Makas-0.1.0.zip' },
 };

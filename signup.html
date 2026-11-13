@@ -45,6 +45,8 @@
 <label class="field"><span data-i18n="au.email">Email</span><input type="email" name="email" autocomplete="email" required placeholder="you@studio.com"></label>
 <label class="field"><span data-i18n="au.pass">Password</span><input type="password" name="password" autocomplete="new-password" required minlength="8" placeholder="At least 8 characters" data-i18n-ph="au.pass.ph"></label>
 <label class="field"><span data-i18n="au.pass2">Repeat password</span><input type="password" name="password2" autocomplete="new-password" required minlength="8" placeholder="••••••••"></label>
+<label class="field" id="inviteRow" hidden><span data-i18n="au.invite">Invite code</span><input type="text" name="invite" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="MAKAS-XXXXXX"></label>
+<p class="gate" id="gateNote" hidden></p>
 <label class="hp" aria-hidden="true">Bu alanı boş bırakın<input type="text" name="makas_hp" tabindex="-1" autocomplete="off"></label>
 <div class="msg" id="msg"></div>
 <button class="btn primary block" type="submit"><span data-i18n="au.signup.btn">Create account</span><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /> </svg></button>

@@ -19,6 +19,7 @@ window.MAKAS_TR = {
  "au.email": "E-posta",
  "au.forgot": "Şifrenizi mi unuttunuz?",
  "au.hasacc": "Zaten hesabınız var mı?",
+ "au.invite": "Davet kodu",
  "au.login.btn": "Giriş yap",
  "au.login.h": "Tekrar hoş geldiniz.",
  "au.login.p": "Planınızı ve cihazlarınızı yönetmek için giriş yapın.",

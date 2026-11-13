@@ -54,17 +54,40 @@
   const lang = () => (tr() ? 'tr' : 'en');
 
   // --- Kayıt ---
+  // Kapalı test: kayıt kipi sunucudan okunur (açık / davet koduyla / kapalı); okunamazsa config.js'teki geçerlidir
+  let gate = C.SIGNUP || 'acik';
+  const paintGate = () => {
+    const f = $('#signupForm');
+    if (!f) return;
+    const invite = gate === 'davet';
+    const closed = gate === 'kapali';
+    $('#inviteRow').hidden = !invite;
+    const note = $('#gateNote');
+    note.hidden = !invite && !closed;
+    note.textContent = closed
+      ? tr() ? 'Makas şu an kapalı testte ve yeni kayıt almıyor. Çok yakında açılacak.' : 'Makas is in a closed test and is not accepting new accounts yet. Opening soon.'
+      : tr() ? 'Makas şu an kapalı testte: kayıt için davet kodu gerekiyor.' : 'Makas is in a closed test: you need an invite code to sign up.';
+    for (const el of f.querySelectorAll('input:not([name=makas_hp]), button[type=submit]')) el.disabled = closed;
+  };
+  if ($('#signupForm')) {
+    paintGate();
+    new MutationObserver(paintGate).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+    if (API) post('/web/config', {}).then((r) => ((gate = r.signup || gate), paintGate())).catch(() => {});
+  }
   $('#signupForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const f = e.currentTarget;
+    if (gate === 'kapali') return;
     const email = f.email.value.trim();
     if (!validEmail(email)) return msg(tr() ? 'Geçerli bir e-posta yazın.' : 'Enter a valid email address.');
     if (f.password.value.length < 8) return msg(tr() ? 'Şifre en az 8 karakter olmalı.' : 'Password must be at least 8 characters.');
     if (f.password.value !== f.password2.value) return msg(tr() ? 'Şifreler aynı değil.' : 'Passwords do not match.');
+    const invite = (f.invite?.value ?? '').trim();
+    if (gate === 'davet' && !invite) return msg(tr() ? 'Davet kodunu yazın.' : 'Enter your invite code.');
     if (!API) return soon();
     busy(f, true);
     try {
-      const r = await post('/web/register', { email, password: f.password.value, lang: lang(), hp: f.makas_hp?.value ?? '' });
+      const r = await post('/web/register', { email, password: f.password.value, lang: lang(), hp: f.makas_hp?.value ?? '', invite });
       session.set(r.session);
       remember(r);
       const q = new URLSearchParams(location.search);

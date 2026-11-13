@@ -35,6 +35,16 @@
 <!-- Özet -->
 <section class="adm-stats" id="stats"></section>
 <section class="adm-setup" id="setup" hidden></section>
+<section class="adm-card" id="gateCard">
+<div class="adm-head"><h2>Kayıtlar</h2><span class="muted" id="gateState"></span></div>
+<div class="adm-gate">
+<div class="chips" id="gateMode"><button data-m="acik">Herkese açık</button><button data-m="davet">Davet koduyla</button><button data-m="kapali">Kapalı</button></div>
+<input type="text" id="gateCode" maxlength="40" placeholder="Davet kodu" autocomplete="off" spellcheck="false">
+<button class="btn primary sm" id="gateSave">Kaydet</button>
+<span class="muted" id="gateHelp">Test bitene kadar “Davet koduyla” kalsın: kodu yalnızca denemesini istediğiniz kişilere verin.</span>
+</div>
+<div class="msg" id="gateMsg"></div>
+</section>
 <section class="adm-card">
 <div class="adm-head"><h2>Son 30 gün: yeni kayıtlar</h2><span class="muted" id="daysNote"></span></div>
 <div class="adm-days" id="days"></div>
