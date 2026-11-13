@@ -64,7 +64,7 @@
     if (!API) return soon();
     busy(f, true);
     try {
-      const r = await post('/web/register', { email, password: f.password.value, lang: lang() });
+      const r = await post('/web/register', { email, password: f.password.value, lang: lang(), hp: f.makas_hp?.value ?? '' });
       session.set(r.session);
       remember(r);
       const q = new URLSearchParams(location.search);

@@ -100,8 +100,8 @@
     const card = (n, label, sub = '', tone = '') => `<div class="adm-stat ${tone}"><b>${n}</b><span>${label}</span>${sub ? `<small>${sub}</small>` : ''}</div>`;
     $('#stats').innerHTML = [
       card(s.total, 'Toplam hesap', `son 7 günde +${s.new7}`),
-      card(s.pro, 'Pro (ödeyen)', `${s.monthly} aylık · ${s.yearly} yıllık`, 'hi'),
-      card(s.trial, 'Denemede'),
+      card(s.pro, 'Pro (ödeyen)', `${s.monthly} aylık · ${s.yearly} yıllık · dönüşüm %${s.total ? Math.round((s.pro / s.total) * 100) : 0}`, 'hi'),
+      card(s.trial, 'Denemede', s.ending3 != null ? `${s.ending3} tanesi 3 günde bitecek` : ''),
       card(s.expired, 'Süresi bitti'),
       card(s.active7, 'Etkin kullanan', `7 gün · 30 günde ${s.active30}`),
       card(s.purchases30, 'Satın alma', `30 gün · ${s.cancels30} iptal`),
@@ -109,6 +109,12 @@
     const max = Math.max(1, ...s.days.map((d) => d.n));
     $('#days').innerHTML = s.days.map((d) => `<i title="${date(d.day)}: ${d.n} kayıt" style="--h:${(d.n / max) * 100}%"></i>`).join('');
     $('#daysNote').textContent = `${s.new30} kayıt`;
+    // Kurulum durumu: eksik olan servisler burada görünür
+    const todo = [];
+    if (s.setup && !s.setup.payments) todo.push('<b>Ödeme kurulu değil.</b> Kullanıcılar satın alamaz; satın alma ve iptal kayıtları boş kalır. (docs/LISANS.md > Paddle)');
+    if (s.setup && !s.setup.email) todo.push('<b>E-posta kurulu değil.</b> “Şifremi unuttum” çalışmaz. (docs/LISANS.md > Resend)');
+    $('#setup').hidden = !todo.length;
+    $('#setup').innerHTML = todo.map((t) => `<div>${t}</div>`).join('');
   }
 
   // ---------- Kullanıcılar ----------

@@ -715,3 +715,9 @@ footer nav a:hover { color: #fff; }
   .nav .btn.acct { padding: 9px 14px; font-size: 14px; }
   .acc-plans { grid-template-columns: 1fr; }
 }
+
+/* Robot tuzağı (insanlar görmez), yönetici: kurulum uyarıları */
+.hp { position: absolute !important; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.adm-setup { display: grid; gap: 8px; padding: 0; margin-top: 14px; }
+.adm-setup > div { padding: 12px 16px; border-radius: 14px; border: 1px solid rgba(251, 191, 36, 0.4); background: rgba(251, 191, 36, 0.1); color: #fde68a; font-size: 14px; }
+.adm-setup b { color: #fff; }

@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https://makas-lisans.thepeassa.workers.dev; base-uri 'self'; form-action 'self'; object-src 'none'">
+<meta name="referrer" content="no-referrer">
 <title>Yönetici — Makas AI</title>
 <meta name="theme-color" content="#060509">
 <link rel="icon" href="assets/favicon.png">
@@ -32,6 +34,7 @@
 <div class="msg" id="msg"></div>
 <!-- Özet -->
 <section class="adm-stats" id="stats"></section>
+<section class="adm-setup" id="setup" hidden></section>
 <section class="adm-card">
 <div class="adm-head"><h2>Son 30 gün: yeni kayıtlar</h2><span class="muted" id="daysNote"></span></div>
 <div class="adm-days" id="days"></div>
@@ -43,7 +46,7 @@
 <section class="adm-card" id="tab-users">
 <div class="adm-tools">
 <input class="adm-input" id="search" placeholder="E-postada ara…" autocomplete="off">
-<div class="chips" id="planFilter"><button class="on" data-p="all">Tümü</button><button data-p="pro">Pro</button><button data-p="trial">Denemede</button><button data-p="expired">Süresi bitti</button></div>
+<div class="chips" id="planFilter"><button class="on" data-p="all">Tümü</button><button data-p="pro">Pro</button><button data-p="trial">Denemede</button><button data-p="ending">3 günde bitecek</button><button data-p="expired">Süresi bitti</button></div>
 <span class="sp"></span><span class="muted" id="userCount"></span>
 <button class="btn ghost sm" id="csv">CSV indir</button>
 </div>

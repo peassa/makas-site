@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-LTVXLzVPVCGns7R9BSSpj59KfxwfvrvWSzwSsVYt0xc='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://makas-lisans.thepeassa.workers.dev; base-uri 'self'; form-action 'self'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Create your account — Makas AI</title>
 <meta name="description" content="Makas AI is the editing assistant that lives inside Premiere Pro and DaVinci Resolve: silence cuts, captions, color and titles in a few clicks. Runs on your computer.">
 <meta property="og:title" content="Makas AI — Cut the boring part.">
@@ -43,6 +45,7 @@
 <label class="field"><span data-i18n="au.email">Email</span><input type="email" name="email" autocomplete="email" required placeholder="you@studio.com"></label>
 <label class="field"><span data-i18n="au.pass">Password</span><input type="password" name="password" autocomplete="new-password" required minlength="8" placeholder="At least 8 characters" data-i18n-ph="au.pass.ph"></label>
 <label class="field"><span data-i18n="au.pass2">Repeat password</span><input type="password" name="password2" autocomplete="new-password" required minlength="8" placeholder="••••••••"></label>
+<label class="hp" aria-hidden="true">Bu alanı boş bırakın<input type="text" name="makas_hp" tabindex="-1" autocomplete="off"></label>
 <div class="msg" id="msg"></div>
 <button class="btn primary block" type="submit"><span data-i18n="au.signup.btn">Create account</span><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /> </svg></button>
 <p class="alt"><span data-i18n="au.hasacc">Already have an account?</span> <a href="login.html" data-i18n="nav.login">Log in</a></p>
