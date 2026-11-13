@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Yönetici — Makas AI</title>
+<meta name="theme-color" content="#060509">
+<link rel="icon" href="assets/favicon.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="adm-body">
+<header class="adm-top"><div class="adm-wrap">
+<a class="brand" href="index.html"><img src="assets/logo.png" alt="" width="36" height="36"><span>Makas</span><em>Yönetici</em></a>
+<span class="sp"></span>
+<button class="btn ghost sm" id="grantOpen" hidden>Hesaba süre ver</button>
+<button class="btn ghost sm" id="refresh" hidden>Yenile</button>
+<button class="btn ghost sm" id="logout" hidden>Çıkış</button>
+</div></header>
+
+<main class="adm-wrap">
+<!-- Giriş -->
+<form class="panel adm-login" id="login" hidden>
+<h1>Yönetici girişi</h1>
+<p class="lead">Lisans sunucusundaki yönetici anahtarını (ADMIN_KEY) yazın. Anahtar yalnızca bu sekmede tutulur.</p>
+<label class="field"><span>Yönetici anahtarı</span><input type="password" id="key" autocomplete="off" required></label>
+<div class="msg" id="loginMsg"></div>
+<button class="btn primary block" type="submit">Giriş</button>
+</form>
+
+<div id="app" hidden>
+<div class="msg" id="msg"></div>
+<!-- Özet -->
+<section class="adm-stats" id="stats"></section>
+<section class="adm-card">
+<div class="adm-head"><h2>Son 30 gün: yeni kayıtlar</h2><span class="muted" id="daysNote"></span></div>
+<div class="adm-days" id="days"></div>
+</section>
+
+<div class="adm-tabs" id="tabs"><button class="on" data-t="users">Kullanıcılar</button><button data-t="events">Olaylar ve satın almalar</button></div>
+
+<!-- Kullanıcılar -->
+<section class="adm-card" id="tab-users">
+<div class="adm-tools">
+<input class="adm-input" id="search" placeholder="E-postada ara…" autocomplete="off">
+<div class="chips" id="planFilter"><button class="on" data-p="all">Tümü</button><button data-p="pro">Pro</button><button data-p="trial">Denemede</button><button data-p="expired">Süresi bitti</button></div>
+<span class="sp"></span><span class="muted" id="userCount"></span>
+<button class="btn ghost sm" id="csv">CSV indir</button>
+</div>
+<div class="adm-scroll"><table class="adm-table"><thead><tr><th>E-posta</th><th>Plan</th><th>Bitiş</th><th>Kayıt</th><th>Satın alma</th><th>Cihaz</th><th>Son kullanım</th></tr></thead><tbody id="users"></tbody></table></div>
+<button class="btn ghost sm" id="more" hidden>Daha fazla göster</button>
+</section>
+
+<!-- Olaylar -->
+<section class="adm-card" id="tab-events" hidden>
+<div class="adm-tools"><div class="chips" id="eventFilter"><button class="on" data-e="">Tümü</button><button data-e="satin-alma">Satın alma</button><button data-e="yenileme">Yenileme</button><button data-e="iptal">İptal</button><button data-e="kayit">Kayıt</button></div></div>
+<div class="adm-scroll"><table class="adm-table"><thead><tr><th>Zaman</th><th>Olay</th><th>E-posta</th><th>Ayrıntı</th></tr></thead><tbody id="events"></tbody></table></div>
+</section>
+</div>
+</main>
+
+<!-- Kullanıcı ayrıntısı -->
+<div class="adm-overlay" id="overlay" hidden><div class="adm-modal" id="modal"></div></div>
+
+<script src="config.js"></script><script src="admin.js"></script>
+</body></html>
