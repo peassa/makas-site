@@ -12,5 +12,6 @@ window.MAKAS = {
   // Sunucu yanıt vermezse ya da eski sürümse bu değer geçerlidir: güvenli tarafta kalmak için kapalı.
   SIGNUP: 'kapali',
   // Kurulum dosyaları (hesap sayfasındaki indirme düğmeleri)
-  DOWNLOADS: { mac: 'download/Makas-0.1.0.zip', win: 'download/Makas-0.1.0.zip' },
+  // Mac: çift tıklanan kurulum uygulaması; Windows: kurulum dosyası zip içinde
+  DOWNLOADS: { mac: 'download/Makas-Kurulum-Mac.zip', win: 'download/Makas-0.1.0.zip' },
 };

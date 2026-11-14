@@ -728,3 +728,5 @@ footer nav a:hover { color: #fff; }
 .adm-gate .chips button.on { background: #fff; color: #14101c; }
 .adm-gate input { height: 40px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--line); background: rgba(255, 255, 255, 0.04); color: inherit; font: inherit; width: 190px; text-transform: uppercase; }
 .adm-gate .muted { flex-basis: 100%; }
+
+.acc-note { margin: 10px 0 0; font-size: 13px; line-height: 1.5; color: var(--mute, #a9a3bb); }

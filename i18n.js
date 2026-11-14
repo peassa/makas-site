@@ -5,6 +5,7 @@ window.MAKAS_TR = {
  "ac.chg": "Şifre değiştir",
  "ac.dev": "Cihazlar",
  "ac.dl": "Makas’ı indir",
+ "ac.dl.how": "Mac: zip’i açıp “Makas Kurulum”a çift tıklayın. macOS “açılamıyor” derse Sistem Ayarları > Gizlilik ve Güvenlik sayfasında “Yine de Aç”a basın (yalnızca ilk açılışta). Windows: zip’i açıp “Makas-Windows-Kurulum”a çift tıklayın.",
  "ac.dl.p": "Eklentiyi kurun, ardından Premiere Pro ya da DaVinci Resolve içinde bu e-posta ve şifreyle giriş yapın.",
  "ac.h": "Hesabınız",
  "ac.out": "Çıkış yap",
