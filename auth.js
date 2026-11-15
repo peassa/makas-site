@@ -378,7 +378,7 @@
       if (!demo) await post('/auth/logout', { session: session.get() }).catch(() => {});
       session.clear();
       forget();
-      location.href = 'index.html';
+      location.href = '/';
     };
     if (demo) {
       paint({ email: 'you@studio.com', plan: 'trial', until: Date.now() + 5 * DAY, devices: [{ id: 'x', name: 'MacBook Pro', platform: 'darwin' }] });
