@@ -169,6 +169,13 @@
       const trial = a.plan === 'trial';
       const days = Math.max(0, Math.ceil((a.until - Date.now()) / DAY));
       $('#planPill').textContent = pro ? 'Pro' : trial ? (tr() ? 'Deneme' : 'Trial') : tr() ? 'Süresi doldu' : 'Expired';
+      // Kurucu üye: ilk 20 hesap
+      const fp = $('#founderPill');
+      if (fp) {
+        fp.hidden = !a.founder;
+        fp.textContent = a.founder ? `★ ${tr() ? 'Kurucu Üye' : 'Founding Member'} #${a.founder}` : '';
+        fp.title = tr() ? 'İlk 20 kullanıcıdan biri' : 'One of the first 20 users';
+      }
 
       // Kalan süre: büyük ve net
       $('#accStatus').hidden = false;
