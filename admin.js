@@ -117,7 +117,7 @@
         `<b>Lisans imza anahtarı ${sg.length ? 'hatalı' : 'tanımlı değil'}: eklentiden kimse giriş yapamaz.</b> Cloudflare > makas-lisans > Settings > Variables and Secrets > SIGNING_KEY değerini yeniden girin (SIGNING_KEY.txt dosyasındaki 64 karakterlik tek satır). Şu anki değer ${sg.length} karakter${sg.reason ? ', hata: ' + esc(sg.reason) : ''}.`,
       );
     if (s.setup && !s.setup.payments) todo.push('<b>Ödeme kurulu değil.</b> Kullanıcılar satın alamaz; satın alma ve iptal kayıtları boş kalır. (docs/LISANS.md > Paddle)');
-    if (s.setup && !s.setup.email) todo.push('<b>E-posta kurulu değil.</b> Kayıtta e-posta onayı istenemiyor (uydurma adreslerle hesap açılabilir) ve “Şifremi unuttum” çalışmıyor. (docs/LISANS.md > Resend)');
+    if (s.setup && !s.setup.email) todo.push('<b>E-posta kurulu değil.</b> Kayıtta e-posta onayı istenemiyor (uydurma adreslerle hesap açılabilir) ve “Şifremi unuttum” çalışmıyor. (docs/LISANS.md > E-posta)');
     $('#setup').hidden = !todo.length;
     $('#setup').innerHTML = todo.map((t) => `<div>${t}</div>`).join('');
   }
