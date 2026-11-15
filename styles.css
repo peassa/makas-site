@@ -782,7 +782,7 @@ footer nav a:hover { color: #fff; }
 }
 @media (prefers-reduced-motion: reduce) { .pay-spin .ic { animation: none; } }
 
-/* Kurucu üye rozeti (ilk 20 hesap) */
+/* İlk kullanıcı rozeti (ilk 20 hesap) */
 .pillp.founder { background: rgba(250, 204, 21, 0.16); color: #facc15; border: 1px solid rgba(250, 204, 21, 0.45); }
 .pillp.founder[hidden] { display: none; }
 .adm-pill.founder { background: rgba(250, 204, 21, 0.16); color: #facc15; }

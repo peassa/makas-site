@@ -66,7 +66,6 @@
     } catch {
       /* yoksay */
     }
-    const days = acct?.plan === 'trial' ? Math.max(0, Math.ceil((acct.until - Date.now()) / 86400000)) : null;
     for (const a of $$('[data-auth="out"]')) a.hidden = true;
     for (const a of $$('a[href^="signup.html"]')) {
       const buy = a.id === 'buy';
@@ -77,20 +76,39 @@
       const inNav = Boolean(a.closest('.nav'));
       label.dataset.i18n = inNav ? 'nav.account' : 'cta.account';
       label.textContent = inNav ? 'My account' : 'Go to my account';
-      if (inNav) {
-        a.classList.add('acct');
-        if (days != null) {
-          const chip = document.createElement('em');
-          chip.className = 'days';
-          chip.dataset.days = String(days);
-          a.append(chip);
-        }
-      }
+      if (inNav) a.classList.add('acct');
     }
+    // Menüdeki küçük etiket: denemede kalan gün, abonelikte "Pro"
     const paintDays = () => {
-      for (const c of $$('.nav .days')) c.textContent = lang === 'tr' ? `${c.dataset.days} gün` : `${c.dataset.days} d`;
+      for (const c of $$('.nav .days')) c.textContent = c.dataset.days ? (lang === 'tr' ? `${c.dataset.days} gün` : `${c.dataset.days} d`) : 'Pro';
     };
+    const paintChip = (acc) => {
+      for (const c of $$('.nav .days')) c.parentNode.removeChild(c);
+      const left = acc?.plan === 'trial' ? Math.max(0, Math.ceil((acc.until - Date.now()) / 86400000)) : null;
+      if (left == null && acc?.plan !== 'pro') return;
+      for (const a of $$('.nav a.acct')) {
+        const chip = document.createElement('em');
+        chip.className = 'days';
+        if (left != null) chip.dataset.days = String(left);
+        a.append(chip);
+      }
+      paintDays();
+    };
+    paintChip(acct);
     document.addEventListener('makas-lang', paintDays);
+    // Saklanan özet eskimiş olabilir (süre uzatıldı, ödeme yapıldı): her sayfa açılışında sunucudan tazelenir.
+    // Hesap ve ödeme sayfaları bunu kendileri yapar.
+    const API = String(window.MAKAS?.API || '').replace(/\/+$/, '');
+    if (API && !$('#account') && !$('#checkout')) {
+      fetch(`${API}/web/account`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ session: store.get('makas-session') }) })
+        .then((r) => (r.ok ? r.json() : null))
+        .then((a) => {
+          if (!a) return;
+          store.set('makas-account', JSON.stringify({ plan: a.plan, until: a.until, founder: a.founder ?? null }));
+          paintChip(a);
+        })
+        .catch(() => {});
+    }
   }
 
   // ---------- Açılış perdesi, menü ----------

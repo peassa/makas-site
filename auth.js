@@ -24,7 +24,7 @@
     },
   };
   /** Menüde plan ve kalan günü gösterebilmek için küçük özet (e-posta saklanmaz). */
-  const remember = (a) => window.makasStore?.set('makas-account', JSON.stringify({ plan: a.plan, until: a.until }));
+  const remember = (a) => window.makasStore?.set('makas-account', JSON.stringify({ plan: a.plan, until: a.until, founder: a.founder ?? null }));
   const forget = () => {
     try {
       localStorage.removeItem('makas-account');
@@ -162,6 +162,7 @@
     const money = (n) => `${P.currency}${Number.isInteger(n) ? n : n.toFixed(2)}`;
     const fmtDate = (ms) => new Date(ms).toLocaleDateString(tr() ? 'tr-TR' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric' });
     let period = q.get('buy') === 'monthly' ? 'monthly' : 'yearly';
+    let painted = false;
     function paint(a) {
       if (!demo) remember(a);
       $('#accEmail').textContent = a.email;
@@ -169,11 +170,11 @@
       const trial = a.plan === 'trial';
       const days = Math.max(0, Math.ceil((a.until - Date.now()) / DAY));
       $('#planPill').textContent = pro ? 'Pro' : trial ? (tr() ? 'Deneme' : 'Trial') : tr() ? 'Süresi doldu' : 'Expired';
-      // Kurucu üye: ilk 20 hesap
+      // İlk kullanıcı rozeti: ilk 20 hesap
       const fp = $('#founderPill');
       if (fp) {
         fp.hidden = !a.founder;
-        fp.textContent = a.founder ? `★ ${tr() ? 'Kurucu Üye' : 'Founding Member'} #${a.founder}` : '';
+        fp.textContent = a.founder ? `★ ${tr() ? 'İlk Kullanıcı' : 'Early User'} #${a.founder}` : '';
         fp.title = tr() ? 'İlk 20 kullanıcıdan biri' : 'One of the first 20 users';
       }
 
@@ -187,8 +188,10 @@
           : a.createdAt && a.until < a.createdAt
             ? tr() ? 'Bu hesapta ücretsiz deneme yok' : 'This account has no free trial'
             : tr() ? 'Deneme süreniz bitti' : 'Your trial has ended';
+      // Elle tanımlanan sürede "yenilenme" yoktur: bitiş günü yazılır
+      const manual = pro && a.hasSubscription === false;
       $('#accUntil').textContent = pro
-        ? `${tr() ? 'Yenilenme:' : 'Renews on'} ${fmtDate(a.until)}`
+        ? `${manual ? (tr() ? 'Bitiş:' : 'Ends on') : tr() ? 'Yenilenme:' : 'Renews on'} ${fmtDate(a.renewsAt ?? a.until)}`
         : trial
           ? `${tr() ? 'Bitiş:' : 'Ends on'} ${fmtDate(a.until)}`
           : tr() ? 'Devam etmek için Makas Pro’ya geçin.' : 'Get Makas Pro to keep editing.';
@@ -263,6 +266,9 @@
         if (url) el.href = url;
         else el.onclick = (e) => (e.preventDefault(), msg(tr() ? 'İndirme bağlantısı yayın günü burada olacak.' : 'The download link will be here on launch day.', 'info'));
       }
+      // Karşılama iletileri ve satın almaya yönlendirme yalnızca ilk çizimde (sayfa kendini tazelerken yinelenmez)
+      if (painted) return;
+      painted = true;
       if (q.get('notrial')) msg(tr() ? 'Hesabınız açıldı. Bu internet bağlantısından son 30 gün içinde zaten bir ücretsiz deneme başlatıldığı için bu hesaba deneme tanımlanmadı. Makas Pro’ya geçerek hemen kullanabilirsiniz; bir yanlışlık varsa bize yazın.' : 'Your account is ready. A free trial was already started from this internet connection in the last 30 days, so this account has no free trial. You can start right away with Makas Pro; if this is a mistake, contact us.', 'info');
       if (q.get('welcome')) msg(tr() ? 'Hoş geldiniz! 7 günlük denemeniz başladı. Şimdi eklentiyi indirin.' : 'Welcome! Your 7-day trial has started. Download the plugin next.', 'ok');
       if (q.get('buy') && !pro && !demo && canPay) $('#planBtn').click();
@@ -277,15 +283,27 @@
       paint({ email: 'you@studio.com', plan: 'trial', until: Date.now() + 5 * DAY, devices: [{ id: 'x', name: 'MacBook Pro', platform: 'darwin' }] });
       msg(tr() ? 'Önizleme: hesaplar yayın günü açılacak. Buradaki bilgiler örnektir.' : 'Preview: accounts open at launch. The details below are sample data.', 'info');
     } else {
-      post('/web/account', { session: session.get() })
-        .then(paint)
-        .catch((err) => {
-          if (err.status === 401) {
-            session.clear();
-            forget();
-            location.href = 'login.html';
-          } else msg(err.message);
-        });
+      const load = (quiet) =>
+        post('/web/account', { session: session.get() })
+          .then(paint)
+          .catch((err) => {
+            if (err.status === 401) {
+              session.clear();
+              forget();
+              location.href = 'login.html';
+            } else if (!quiet) msg(err.message);
+          });
+      load(false);
+      // Süre uzatıldıysa ya da ödeme yapıldıysa sayfayı yenilemeden görünsün: sekmeye dönünce ve dakikada bir
+      let last = Date.now();
+      const again = () => {
+        if (document.visibilityState !== 'visible' || Date.now() - last < 15000) return;
+        last = Date.now();
+        load(true);
+      };
+      document.addEventListener('visibilitychange', again);
+      addEventListener('focus', again);
+      setInterval(again, 60000);
     }
     document.addEventListener('makas-lang', () => location.reload());
   }
