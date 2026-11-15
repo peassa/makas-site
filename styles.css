@@ -786,3 +786,6 @@ footer nav a:hover { color: #fff; }
 .pillp.founder { background: rgba(250, 204, 21, 0.16); color: #facc15; border: 1px solid rgba(250, 204, 21, 0.45); }
 .pillp.founder[hidden] { display: none; }
 .adm-pill.founder { background: rgba(250, 204, 21, 0.16); color: #facc15; }
+
+/* Kayıt: e-posta onayı adımı */
+#verifyStep .gate { margin-top: 18px; }

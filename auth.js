@@ -56,6 +56,58 @@
   // --- Kayıt ---
   // Kapalı test: kayıt kipi sunucudan okunur (açık / davet koduyla / kapalı); okunamazsa config.js'teki geçerlidir
   let gate = C.SIGNUP || 'acik';
+  // E-posta onayı: sunucu "kodu e-postaya gönderdim" derse form ikinci adıma geçer; hesap kod girilince açılır
+  let pendingEmail = '';
+  const keep = {
+    get: () => {
+      try {
+        return JSON.parse(sessionStorage.getItem('makas-onay') || 'null');
+      } catch {
+        return null;
+      }
+    },
+    set: (v) => {
+      try {
+        if (v) sessionStorage.setItem('makas-onay', JSON.stringify(v));
+        else sessionStorage.removeItem('makas-onay');
+      } catch {
+        /* yoksay */
+      }
+    },
+  };
+  const paintVerify = () => {
+    const f = $('#signupForm');
+    if (!f) return;
+    const on = Boolean(pendingEmail);
+    $('#signupStep1').hidden = on;
+    $('#verifyStep').hidden = !on;
+    const b = $('#signupBtn');
+    b.dataset.i18n = on ? 'au.verify.btn' : 'au.signup.btn';
+    b.textContent = on ? t('au.verify.btn', 'Confirm account') : t('au.signup.btn', 'Create account');
+    if (on)
+      $('#verifyText').textContent = tr()
+        ? `${pendingEmail} adresine 6 haneli bir kod gönderdik. Kodu buraya yazın ya da e-postadaki “Hesabımı onayla” düğmesine basın. E-posta gelmediyse gereksiz (spam) klasörüne bakın.`
+        : `We sent a 6-digit code to ${pendingEmail}. Enter it here or press “Confirm my account” in the email. If it has not arrived, check your spam folder.`;
+  };
+  const startVerify = (email, extra = {}) => {
+    pendingEmail = email;
+    keep.set({ email, ...extra });
+    paintVerify();
+    paintGate();
+    $('#signupForm').code.value = '';
+    $('#signupForm').code.focus();
+  };
+  /** Hesap açıldı: oturumu sakla ve yönlendir. */
+  const finishSignup = (r) => {
+    const saved = keep.get() ?? {};
+    keep.set(null);
+    session.set(r.session);
+    remember(r);
+    const q = new URLSearchParams(location.search);
+    const plan = q.get('plan') ?? saved.plan;
+    const period = q.get('period') ?? saved.period;
+    location.href = plan === 'pro' ? `checkout.html?p=${period === 'monthly' ? 'monthly' : 'yearly'}` : r.trialDenied ? 'account.html?notrial=1' : 'account.html?welcome=1';
+  };
   const paintGate = () => {
     const f = $('#signupForm');
     if (!f) return;
@@ -67,16 +119,60 @@
     note.textContent = closed
       ? tr() ? 'Makas şu an kapalı testte ve yeni kayıt almıyor. Çok yakında açılacak.' : 'Makas is in a closed test and is not accepting new accounts yet. Opening soon.'
       : tr() ? 'Makas şu an kapalı testte: kayıt için davet kodu gerekiyor.' : 'Makas is in a closed test: you need an invite code to sign up.';
-    for (const el of f.querySelectorAll('input:not([name=makas_hp]), button[type=submit]')) el.disabled = closed;
+    for (const el of f.querySelectorAll('input:not([name=makas_hp]), button[type=submit]')) el.disabled = closed && !pendingEmail;
   };
   if ($('#signupForm')) {
     paintGate();
     new MutationObserver(paintGate).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
     if (API) post('/web/config', {}).then((r) => ((gate = r.signup || gate), paintGate())).catch(() => {});
+    document.addEventListener('makas-lang', paintVerify);
+    const f = $('#signupForm');
+    const q0 = new URLSearchParams(location.search);
+    const verify = async (email, code) => {
+      busy(f, true);
+      try {
+        finishSignup(await post('/web/register/verify', { email, code }));
+      } catch (err) {
+        msg(err.message);
+      } finally {
+        busy(f, false);
+      }
+    };
+    $('#verifyBack').onclick = (e) => {
+      e.preventDefault();
+      pendingEmail = '';
+      keep.set(null);
+      msg('', 'info');
+      $('#msg').className = 'msg';
+      paintVerify();
+      paintGate();
+    };
+    $('#verifyResend').onclick = async (e) => {
+      e.preventDefault();
+      try {
+        await post('/web/register/resend', { email: pendingEmail, lang: lang() });
+        msg(tr() ? 'Yeni kod gönderildi. E-postanızı kontrol edin.' : 'A new code is on its way. Check your email.', 'ok');
+      } catch (err) {
+        msg(err.message);
+      }
+    };
+    f.verifyCode = verify;
+    if (q0.get('onay') && q0.get('kod')) {
+      // E-postadaki düğmeden gelindi: kod kendiliğinden gönderilir
+      startVerify(q0.get('onay'));
+      f.code.value = q0.get('kod');
+      history.replaceState(null, '', location.pathname);
+      if (API) verify(q0.get('onay'), q0.get('kod'));
+    } else if (keep.get()?.email) startVerify(keep.get().email, keep.get());
   }
   $('#signupForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const f = e.currentTarget;
+    if (pendingEmail) {
+      const code = f.code.value.replace(/\D/g, '');
+      if (code.length !== 6) return msg(tr() ? 'E-postadaki 6 haneli kodu yazın.' : 'Enter the 6-digit code from the email.');
+      return f.verifyCode(pendingEmail, code);
+    }
     if (gate === 'kapali') return;
     const email = f.email.value.trim();
     if (!validEmail(email)) return msg(tr() ? 'Geçerli bir e-posta yazın.' : 'Enter a valid email address.');
@@ -88,10 +184,15 @@
     busy(f, true);
     try {
       const r = await post('/web/register', { email, password: f.password.value, lang: lang(), hp: f.makas_hp?.value ?? '', invite });
-      session.set(r.session);
-      remember(r);
-      const q = new URLSearchParams(location.search);
-      location.href = q.get('plan') === 'pro' ? `checkout.html?p=${q.get('period') === 'monthly' ? 'monthly' : 'yearly'}` : r.trialDenied ? 'account.html?notrial=1' : 'account.html?welcome=1';
+      if (r.verify) {
+        // Hesap henüz açılmadı: e-postadaki kod bekleniyor
+        const q = new URLSearchParams(location.search);
+        startVerify(r.email || email, { plan: q.get('plan'), period: q.get('period') });
+        msg('', 'info');
+        $('#msg').className = 'msg';
+        return;
+      }
+      finishSignup(r);
     } catch (err) {
       msg(err.message);
     } finally {
