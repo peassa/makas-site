@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-LTVXLzVPVCGns7R9BSSpj59KfxwfvrvWSzwSsVYt0xc=' https://cdn.paddle.com https://public.profitwell.com; style-src 'self' 'unsafe-inline' https://cdn.paddle.com; img-src 'self' data: https://*.paddle.com; font-src 'self'; connect-src 'self' https://makas-lisans.thepeassa.workers.dev https://*.paddle.com https://*.profitwell.com; frame-src https://buy.paddle.com https://sandbox-buy.paddle.com; base-uri 'self'; form-action 'self'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="robots" content="noindex">
+<title>Checkout — Makas AI</title>
+<meta name="description" content="Makas AI is the editing assistant that lives inside Premiere Pro and DaVinci Resolve: silence cuts, captions, color and titles in a few clicks. Runs on your computer.">
+<meta property="og:title" content="Makas AI — Cut the boring part.">
+<meta property="og:description" content="The AI editing assistant for Premiere Pro and DaVinci Resolve.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://makasai.net/">
+<meta property="og:image" content="https://makasai.net/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://makasai.net/assets/og.jpg">
+<link rel="apple-touch-icon" href="assets/logo.png">
+<meta name="theme-color" content="#060509">
+<link rel="icon" href="assets/favicon.png">
+<link rel="stylesheet" href="styles.css">
+<script>document.documentElement.classList.add('js');setTimeout(function(){if(!window.makasReady)document.documentElement.classList.remove('js')},3500)</script>
+</head>
+<body>
+<div class="curtain t"></div><div class="curtain b"></div>
+<div class="progress" id="progress"></div>
+<div class="grain" aria-hidden="true"></div>
+<header class="nav" id="nav"><div class="wrap">
+<a class="brand" href="index.html"><img src="assets/logo.png" alt="Makas AI" width="36" height="36"><span>Makas</span><em>AI</em><em class="beta">Beta</em></a>
+<nav>
+<a href="index.html#play" data-i18n="nav.play">Playground</a>
+<a href="index.html#more" data-i18n="nav.features">Features</a>
+<a href="index.html#pricing" data-i18n="nav.pricing">Pricing</a>
+<a href="index.html#faq" data-i18n="nav.faq">FAQ</a>
+</nav>
+<span class="sp"></span>
+<div class="lang" id="lang"><button data-lang="en">EN</button><button data-lang="tr">TR</button></div>
+<a class="login" href="login.html" data-auth="out" data-i18n="nav.login">Log in</a>
+<a class="btn primary sm" href="signup.html"><span data-i18n="nav.cta">Start free</span></a>
+<button class="burger" id="burger" aria-label="Menu"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M4 5h16" /> <path d="M4 12h16" /> <path d="M4 19h16" /> </svg></button>
+</div></header>
+<main class="auth"><div class="panel pay fade-up" id="checkout">
+<a class="pay-back" href="account.html"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /> </svg><span data-i18n="pay.back">My account</span></a>
+<h1><span data-i18n="pay.h">Get Makas Pro</span></h1><p class="lead" data-i18n="pay.p">One plan with everything in it. Cancel anytime.</p>
+<div class="pay-grid">
+<section class="pay-sum" aria-labelledby="paySumH">
+<h2 id="paySumH"><span data-i18n="pay.sum">Order summary</span></h2>
+<div class="acc-plans" id="payPlans"><button type="button" class="acc-plan" data-period="monthly"><b id="pmPrice">—</b><span data-i18n="ac.pm">Monthly</span></button><button type="button" class="acc-plan on" data-period="yearly"><b id="pyPrice">—</b><span data-i18n="ac.py">Yearly</span><em id="pySave"></em></button></div>
+<p class="pay-bill" id="payBill"></p>
+<ul class="pay-list"><li><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 6 9 17l-5-5" /> </svg><span data-i18n="pay.l1">Silence and filler cuts</span></li><li><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 6 9 17l-5-5" /> </svg><span data-i18n="pay.l2">Captions, titles and color</span></li><li><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 6 9 17l-5-5" /> </svg><span data-i18n="pay.l3">333 sound effects and 50 transitions</span></li><li><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 6 9 17l-5-5" /> </svg><span data-i18n="pay.l4">Premiere Pro + DaVinci Resolve</span></li><li><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 6 9 17l-5-5" /> </svg><span data-i18n="pay.l5">2 devices per account</span></li><li><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 6 9 17l-5-5" /> </svg><span data-i18n="pay.l6">All future updates</span></li></ul>
+<dl class="pay-totals">
+<div><dt data-i18n="pay.sub">Subtotal</dt><dd id="paySub">—</dd></div>
+<div><dt data-i18n="pay.tax">Tax</dt><dd id="payTax">—</dd></div>
+<div class="total"><dt data-i18n="pay.total">Due today</dt><dd id="payTotal">—</dd></div>
+</dl>
+<p class="pay-renew" id="payRenew"></p>
+<p class="pay-who" id="payWho" hidden></p>
+</section>
+<section class="pay-box" aria-labelledby="payBoxH">
+<h2 id="payBoxH"><span data-i18n="pay.box">Payment</span></h2>
+<div class="msg" id="msg"></div>
+<div class="pay-state" data-state="load"><span class="pay-spin"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M21 12a9 9 0 1 1-6.219-8.56" /> </svg></span><p data-i18n="pay.load">Preparing the secure payment form…</p></div>
+<div class="pay-state" data-state="login" hidden><span class="pay-ic"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m10 17 5-5-5-5" /> <path d="M15 12H3" /> <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" /> </svg></span><h3 data-i18n="pay.login.h">Sign in to continue</h3><p data-i18n="pay.login.p">Makas Pro is tied to your account, so we need to know who is paying.</p><a class="btn primary block" id="payLogin" href="login.html?next=checkout"><span data-i18n="nav.login">Log in</span><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /> </svg></a><a class="btn ghost block" id="paySignup" href="signup.html?plan=pro" data-i18n="ft.signup">Create account</a></div>
+<div class="pay-state" data-state="soon" hidden><span class="pay-ic"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="12" r="10" /> <path d="M12 6v6l4 2" /> </svg></span><h3 data-i18n="pay.soon.h">Checkout opens very soon</h3><p data-i18n="pay.soon.p">We are finishing the payment setup. Your trial keeps running in the meantime, and we will let you know before it ends.</p><a class="btn ghost block" href="account.html" data-i18n="cta.account">Go to my account</a></div>
+<div class="pay-state" data-state="pro" hidden><span class="pay-ic ok"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z" /> <path d="M5 21h14" /> </svg></span><h3 data-i18n="pay.pro.h">You already have Makas Pro</h3><p data-i18n="pay.pro.p">Your subscription is active. Manage your card, invoices or cancellation from your account page.</p><a class="btn primary block" href="account.html" data-i18n="cta.account">Go to my account</a></div>
+<div class="pay-state" data-state="error" hidden><span class="pay-ic bad"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="12" r="10" /> <line x1="12" x2="12" y1="8" y2="12" /> <line x1="12" x2="12.01" y1="16" y2="16" /> </svg></span><h3 data-i18n="pay.err.h">The payment form could not open</h3><p id="payErr"></p><button class="btn ghost block" type="button" id="payRetry" data-i18n="pay.retry">Try again</button></div>
+<div class="pay-state" data-state="done" hidden><span class="pay-ic ok"><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /> </svg></span><h3 id="payDoneH" data-i18n="pay.done.h">Payment received</h3><p id="payDoneP"></p><a class="btn primary block" href="account.html" data-i18n="cta.account">Go to my account</a></div>
+<div class="paddle-frame" id="payFrame" hidden></div>
+<ul class="pay-trust">
+<li><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="18" height="11" x="3" y="11" rx="2" ry="2" /> <path d="M7 11V7a5 5 0 0 1 10 0v4" /> </svg><span data-i18n="pay.t1">Payments are processed by Paddle. Your card details never reach Makas.</span></li>
+<li><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /> <path d="M3 3v5h5" /> </svg><span><a href="refund.html" data-i18n="pr.refund">14-day money-back guarantee</a></span></li>
+<li><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> <path d="m9 12 2 2 4-4" /> </svg><span><span data-i18n="pay.t3">By paying you accept the</span> <a href="terms.html" data-i18n="ft.terms">Terms</a> · <a href="privacy.html" data-i18n="ft.privacy">Privacy</a></span></li>
+</ul>
+</section>
+</div></div></main><footer><div class="wrap">
+<div class="ft-top">
+<div class="ft-brand"><a class="brand" href="index.html"><img src="assets/logo.png" alt="" width="36" height="36"><span>Makas</span><em>AI</em><em class="beta">Beta</em></a><p><span data-i18n="ft.tag">The editing assistant for Premiere Pro and DaVinci Resolve.</span></p></div>
+<nav><b><span data-i18n="ft.product">Product</span></b><a href="index.html#play" data-i18n="nav.play">Playground</a><a href="index.html#more" data-i18n="nav.features">Features</a><a href="index.html#pricing" data-i18n="nav.pricing">Pricing</a><a href="index.html#faq" data-i18n="nav.faq">FAQ</a></nav>
+<nav><b><span data-i18n="ft.account">Account</span></b><a href="login.html" data-i18n="nav.login">Log in</a><a href="signup.html" data-i18n="ft.signup">Create account</a><a href="https://instagram.com/makasai.co" rel="noopener">Instagram</a></nav>
+<nav><b><span data-i18n="ft.legal">Legal</span></b><a href="privacy.html" data-i18n="ft.privacy">Privacy</a><a href="terms.html" data-i18n="ft.terms">Terms</a><a href="refund.html" data-i18n="ft.refund">Refunds</a></nav>
+</div>
+<div class="ft-bot"><span>© <span id="year"></span> Makas AI</span><span><span data-i18n="ft.note">Premiere Pro and DaVinci Resolve are trademarks of their owners.</span></span></div>
+</div></footer>
+<script src="config.js"></script><script src="i18n.js"></script><script src="app.js"></script>
+<script src="checkout.js"></script></body></html>

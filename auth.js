@@ -91,7 +91,7 @@
       session.set(r.session);
       remember(r);
       const q = new URLSearchParams(location.search);
-      location.href = q.get('plan') === 'pro' ? `account.html?buy=${q.get('period') || 'yearly'}` : r.trialDenied ? 'account.html?notrial=1' : 'account.html?welcome=1';
+      location.href = q.get('plan') === 'pro' ? `checkout.html?p=${q.get('period') === 'monthly' ? 'monthly' : 'yearly'}` : r.trialDenied ? 'account.html?notrial=1' : 'account.html?welcome=1';
     } catch (err) {
       msg(err.message);
     } finally {
@@ -110,7 +110,8 @@
       const r = await post('/web/login', { email: f.email.value.trim(), password: f.password.value });
       session.set(r.session);
       remember(r);
-      location.href = 'account.html';
+      const q = new URLSearchParams(location.search);
+      location.href = q.get('next') === 'checkout' ? `checkout.html?p=${q.get('p') === 'monthly' ? 'monthly' : 'yearly'}` : 'account.html';
     } catch (err) {
       msg(err.message);
     } finally {
@@ -206,12 +207,7 @@
         e.preventDefault();
         if (demo) return soon();
         if (!canPay) return msg(tr() ? 'Ödeme sayfası çok yakında açılıyor. Denemeniz bitmeden haber vereceğiz.' : 'Checkout opens very soon. We will let you know before your trial ends.', 'info');
-        try {
-          const r = await post('/checkout', { session: session.get(), period: period === 'monthly' ? 'aylik' : 'yillik' });
-          location.href = r.url;
-        } catch (err) {
-          msg(err.message);
-        }
+        location.href = `checkout.html?p=${period}`;
       };
 
       // Ödeme ve faturalar: kart bilgisi ödeme sağlayıcısında durur

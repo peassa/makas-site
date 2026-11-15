@@ -70,8 +70,8 @@
     for (const a of $$('[data-auth="out"]')) a.hidden = true;
     for (const a of $$('a[href^="signup.html"]')) {
       const buy = a.id === 'buy';
-      a.href = buy ? 'account.html?buy=yearly' : 'account.html';
-      if (buy) continue; // "Makas Pro’ya geç" yazısı kalır, hesaptaki ödeme adımına gider
+      a.href = buy ? 'checkout.html?p=yearly' : 'account.html';
+      if (buy) continue; // "Makas Pro’ya geç" yazısı kalır, ödeme sayfasına gider
       const label = a.querySelector('[data-i18n]') ?? (a.dataset.i18n ? a : null);
       if (!label) continue;
       const inNav = Boolean(a.closest('.nav'));
@@ -850,7 +850,7 @@
       $('#trialPrice').textContent = `${P.currency}0`;
       $('#priceNote').textContent = period === 'yearly' ? str('pr.billedY').replace('{p}', fmt(P.yearly)) : str('pr.billedM');
       $('#save').textContent = save > 0 ? `−${save}%` : '';
-      $('#buy').href = signedIn ? `account.html?buy=${period}` : `signup.html?plan=pro&period=${period}`;
+      $('#buy').href = signedIn ? `checkout.html?p=${period}` : `signup.html?plan=pro&period=${period}`;
       for (const b of $$('button', bill)) b.classList.toggle('on', b.dataset.p === period);
     };
     for (const b of $$('button', bill)) b.addEventListener('click', () => ((period = b.dataset.p), paint()));
