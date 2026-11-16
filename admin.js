@@ -26,7 +26,7 @@
     return d > 0 ? `${d} gün kaldı` : `${-d} gün önce bitti`;
   };
   const PLAN = { pro: 'Pro', trial: 'Deneme', expired: 'Süresi bitti' };
-  const EVENT = { kayit: 'Kayıt', 'satin-alma': 'Satın alma', yenileme: 'Yenileme', iptal: 'İptal', 'odeme-gecikti': 'Ödeme gecikti', 'admin-sure': 'Elle Pro süresi', 'admin-deneme': 'Deneme ayarlandı', 'admin-bitir': 'Erişim bitirildi', 'admin-cihaz': 'Cihaz çıkarıldı', 'admin-sil': 'Hesap silindi', 'deneme-tekrar': 'Deneme reddedildi (aynı bilgisayar)', 'deneme-yok': 'Deneme verilmedi (aynı ağ)', 'admin-kayit': 'Kayıt kipi değişti', 'admin-kurucu': 'İlk kullanıcı rozeti' };
+  const EVENT = { kayit: 'Kayıt', 'satin-alma': 'Satın alma', yenileme: 'Yenileme', iptal: 'İptal', 'odeme-gecikti': 'Ödeme gecikti', 'admin-sure': 'Elle Pro süresi', 'admin-deneme': 'Deneme ayarlandı', 'admin-bitir': 'Erişim bitirildi', 'admin-cihaz': 'Cihaz çıkarıldı', 'admin-sil': 'Hesap silindi', 'deneme-tekrar': 'Deneme reddedildi (aynı bilgisayar)', 'deneme-yok': 'Deneme verilmedi (aynı ağ)', 'admin-kayit': 'Kayıt kipi değişti', 'admin-kurucu': 'İlk kullanıcı rozeti', 'izin-ileti': 'Ticari ileti izni verildi', 'izin-geri': 'Ticari ileti izni geri alındı', 'sozlesme-onay': 'Ödeme öncesi sözleşme onayı' };
   const PERIOD = { aylik: 'Aylık', yillik: 'Yıllık' };
 
   const show = (el, text, kind = 'err') => {
@@ -162,7 +162,7 @@
         if (all.length >= r.total || !r.users.length) break;
       }
       const iso = (ms) => (ms ? new Date(ms).toISOString() : '');
-      const lines = [['e-posta', 'plan', 'donem', 'bitis', 'kayit', 'satin_alma', 'cihaz', 'son_kullanim', 'not'], ...all.map((u) => [u.email, u.plan, u.subPeriod ?? '', iso(u.until), iso(u.createdAt), iso(u.subStartedAt), u.devices, iso(u.lastSeen), u.note])];
+      const lines = [['e-posta', 'plan', 'donem', 'bitis', 'kayit', 'satin_alma', 'cihaz', 'son_kullanim', 'ileti_izni', 'ileti_izni_tarih', 'kosul_surumu', 'not'], ...all.map((u) => [u.email, u.plan, u.subPeriod ?? '', iso(u.until), iso(u.createdAt), iso(u.subStartedAt), u.devices, iso(u.lastSeen), u.marketing ? 'evet' : 'hayir', iso(u.marketingAt), u.termsVersion ?? '', u.note])];
       const csv = lines.map((l) => l.map((v) => `"${String(v ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
       const a = document.createElement('a');
       a.href = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv' }));
@@ -215,6 +215,8 @@
         <dt>Abonelik durumu</dt><dd>${esc(u.subStatus ?? '—')}${u.paddle ? ' · Paddle' : u.subStatus ? ' · elle verildi' : ''}</dd>
         <dt>Deneme bitişi</dt><dd>${date(u.trialEndsAt)}</dd>
         <dt>Son kullanım</dt><dd>${ago(u.lastSeen)}</dd>
+        <dt>Koşulların kabulü</dt><dd>${u.termsAt ? `${dateTime(u.termsAt)} · sürüm ${esc(u.termsVersion)}` : '—'}</dd>
+        <dt>Ticari ileti izni</dt><dd>${u.marketing ? `Var · ${dateTime(u.marketingAt)}` : u.marketingAt ? `Yok · geri alındı ${dateTime(u.marketingAt)}` : 'Yok'}</dd>
       </dl>
       <h3>Cihazlar (${devices.length}/2)</h3>
       <div class="adm-list">${devices.map((d) => `<div><span>${esc(d.name || 'Bilgisayar')} · ${d.platform === 'darwin' ? 'macOS' : d.platform === 'win32' ? 'Windows' : esc(d.platform || '')} · ${ago(d.lastSeen)}</span><button data-a="device" data-id="${esc(d.id)}">Çıkar</button></div>`).join('') || '<div class="muted">Henüz cihaz yok.</div>'}</div>

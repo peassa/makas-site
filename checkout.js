@@ -21,6 +21,7 @@
   let live = null; // açık ödeme formunun tutarları: { currency, sub, tax, total }
   let opened = false;
   let finished = false;
+  let agreed = false; // Ön bilgilendirme + mesafeli satış onayı (bu sayfa açıkken bir kez)
 
   const session = {
     get: () => window.makasStore?.get('makas-session') ?? null,
@@ -290,8 +291,26 @@
     if (ptxn) return openCheckout(); // Paddle'ın hazırladığı işlem: kimlik işlemin içindedir
     if (!info.email) return show('login');
     if (info.plan === 'pro' && info.hasSubscription) return show('pro');
+    if (!agreed) return show('agree');
     openCheckout();
   }
+
+  // Ödemeden önce: Ön Bilgilendirme Formu ve Mesafeli Satış Sözleşmesi onayı (sunucuda kayıt altına alınır)
+  $('#agreeBtn').onclick = async () => {
+    if (!$('#agreeBox').checked) return msg(tr() ? 'Devam etmek için Ön Bilgilendirme Formu’nu ve Mesafeli Satış Sözleşmesi’ni onaylayın.' : 'Please accept the Pre-Contract Information and the Distance Sales Agreement to continue.');
+    msg('');
+    const b = $('#agreeBtn');
+    b.disabled = true;
+    try {
+      await post('/web/agree', { ...(ticket ? { ticket } : {}), ...(session.get() ? { session: session.get() } : {}), period });
+      agreed = true;
+      openCheckout();
+    } catch (err) {
+      msg(err.message);
+    } finally {
+      b.disabled = false;
+    }
+  };
 
   for (const b of root.querySelectorAll('#payPlans .acc-plan')) {
     b.onclick = () => {

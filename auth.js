@@ -81,6 +81,7 @@
     const on = Boolean(pendingEmail);
     $('#signupStep1').hidden = on;
     $('#verifyStep').hidden = !on;
+    if ($('#termsNote')) $('#termsNote').hidden = on;
     const b = $('#signupBtn');
     b.dataset.i18n = on ? 'au.verify.btn' : 'au.signup.btn';
     b.textContent = on ? t('au.verify.btn', 'Confirm account') : t('au.signup.btn', 'Create account');
@@ -183,7 +184,8 @@
     if (!API) return soon();
     busy(f, true);
     try {
-      const r = await post('/web/register', { email, password: f.password.value, lang: lang(), hp: f.makas_hp?.value ?? '', invite });
+      // "Hesap oluştur"a basmak koşulların kabulüdür (formun altında yazar); ileti izni isteğe bağlı kutudan gelir
+      const r = await post('/web/register', { email, password: f.password.value, lang: lang(), hp: f.makas_hp?.value ?? '', invite, terms: true, marketing: Boolean(f.marketing?.checked) });
       if (r.verify) {
         // Hesap henüz açılmadı: e-postadaki kod bekleniyor
         const q = new URLSearchParams(location.search);
@@ -340,6 +342,26 @@
         }
       };
 
+      // İletişim tercihleri: ticari ileti izni (her değişiklik sunucuda kayıt altına alınır)
+      const mkt = $('#mktToggle');
+      if (mkt) {
+        mkt.checked = Boolean(a.marketing);
+        mkt.onchange = async () => {
+          if (demo) return soon();
+          const want = mkt.checked;
+          mkt.disabled = true;
+          try {
+            const r = await post('/web/consent', { session: session.get(), marketing: want });
+            mkt.checked = Boolean(r.marketing);
+            msg(want ? (tr() ? 'Duyuru e-postalarına izin verdiniz. İstediğiniz zaman buradan geri alabilirsiniz.' : 'You will receive announcements. You can turn this off here any time.') : tr() ? 'Duyuru e-postası izni geri alındı.' : 'Announcement emails turned off.', 'ok');
+          } catch (err) {
+            mkt.checked = !want;
+            msg(err.message);
+          } finally {
+            mkt.disabled = false;
+          }
+        };
+      }
       const list = $('#devices');
       list.innerHTML = '';
       if (!a.devices?.length) list.innerHTML = `<p>${tr() ? 'Henüz cihaz yok. Eklentiyi kurup giriş yapınca burada görünür (en fazla 2).' : 'No devices yet. They appear here after you sign in inside the plugin (up to 2).'}</p>`;

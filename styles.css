@@ -789,3 +789,15 @@ footer nav a:hover { color: #fff; }
 
 /* Kayıt: e-posta onayı adımı */
 #verifyStep .gate { margin-top: 18px; }
+
+/* Onaylar: kayıt formu, hesap sayfası, ödeme */
+.consent { display: flex; gap: 10px; align-items: flex-start; margin-top: 16px; font-size: 13.5px; line-height: 1.5; color: var(--ink-2); cursor: pointer; }
+.consent input { flex: none; width: 18px; height: 18px; margin-top: 2px; accent-color: #a855f7; cursor: pointer; }
+.consent a, .legal-note a { color: #e9d5ff; text-decoration: underline; text-underline-offset: 3px; }
+.legal-note { margin-top: 14px; font-size: 12.5px; line-height: 1.55; color: var(--ink-3); }
+.legal-note[hidden] { display: none; }
+.pay-state.agree { text-align: left; }
+.pay-state.agree h3, .pay-state.agree .pay-ic { display: block; margin-left: auto; margin-right: auto; text-align: center; }
+.pay-state.agree .pay-ic { display: grid; }
+.legal mark.eksik { background: rgba(250, 204, 21, 0.25); color: #fde68a; padding: 0 4px; border-radius: 4px; }
+.pay-state .legal-note { margin: 10px 0 0 28px; max-width: none; font-size: 12.5px; text-align: left; }
