@@ -26,7 +26,7 @@
     return d > 0 ? `${d} gün kaldı` : `${-d} gün önce bitti`;
   };
   const PLAN = { pro: 'Pro', trial: 'Deneme', expired: 'Süresi bitti' };
-  const EVENT = { kayit: 'Kayıt', 'satin-alma': 'Satın alma', yenileme: 'Yenileme', iptal: 'İptal', 'odeme-gecikti': 'Ödeme gecikti', 'admin-sure': 'Elle Pro süresi', 'admin-deneme': 'Deneme ayarlandı', 'admin-bitir': 'Erişim bitirildi', 'admin-cihaz': 'Cihaz çıkarıldı', 'admin-sil': 'Hesap silindi', 'deneme-tekrar': 'Deneme reddedildi (aynı bilgisayar)', 'deneme-yok': 'Deneme verilmedi (aynı ağ)', 'admin-kayit': 'Kayıt kipi değişti', 'admin-kurucu': 'İlk kullanıcı rozeti', 'izin-ileti': 'Ticari ileti izni verildi', 'izin-geri': 'Ticari ileti izni geri alındı', 'sozlesme-onay': 'Ödeme öncesi sözleşme onayı' };
+  const EVENT = { kayit: 'Kayıt', 'satin-alma': 'Satın alma', yenileme: 'Yenileme', iptal: 'İptal', 'odeme-gecikti': 'Ödeme gecikti', 'admin-sure': 'Elle Pro süresi', 'admin-deneme': 'Deneme ayarlandı', 'admin-bitir': 'Erişim bitirildi', 'admin-cihaz': 'Cihaz çıkarıldı', 'admin-sil': 'Hesap silindi', 'deneme-tekrar': 'Deneme reddedildi (aynı bilgisayar)', 'deneme-yok': 'Deneme verilmedi (aynı ağ)', 'admin-kayit': 'Kayıt kipi değişti', 'admin-kurucu': 'İlk kullanıcı rozeti', 'izin-ileti': 'Ticari ileti izni verildi', 'izin-geri': 'Ticari ileti izni geri alındı', 'sozlesme-onay': 'Ödeme öncesi sözleşme onayı', 'hata-raporu': 'Hata raporu gönderdi' };
   const PERIOD = { aylik: 'Aylık', yillik: 'Yıllık' };
 
   const show = (el, text, kind = 'err') => {
@@ -193,9 +193,84 @@
   for (const b of $$('#tabs button'))
     b.addEventListener('click', () => {
       $$('#tabs button').forEach((x) => x.classList.toggle('on', x === b));
-      $('#tab-users').hidden = b.dataset.t !== 'users';
-      $('#tab-events').hidden = b.dataset.t !== 'events';
+      for (const t of ['users', 'events', 'reports']) $(`#tab-${t}`).hidden = b.dataset.t !== t;
     });
+
+  // ---------- Hata raporları (eklentideki "Bize gönder") ----------
+  const HOST = { premiere: 'Premiere Pro', resolve: 'DaVinci Resolve', tarayıcı: 'Tarayıcı' };
+  const OS = { darwin: 'macOS', win32: 'Windows', linux: 'Linux' };
+  async function loadReports() {
+    let r;
+    try {
+      r = await api('reports', { limit: 200 });
+    } catch (err) {
+      if (err.status === 403) throw err;
+      // Eski sunucu kodunda bu bölüm yok
+      $('#reports').innerHTML = '<tr><td colspan="5" class="muted">Bu bölüm için yeni sunucu kodunu Cloudflare’e yapıştırmanız gerekiyor.</td></tr>';
+      return;
+    }
+    const badge = $('#reportsNew');
+    badge.hidden = !r.unseen;
+    badge.textContent = r.unseen;
+    $('#reports').innerHTML =
+      r.reports
+        .map(
+          (x) =>
+            `<tr data-id="${x.id}" class="${x.seen ? '' : 'new'}"><td>${dateTime(x.at)}<small>${ago(x.at)}</small></td><td class="em">${esc(x.email ?? 'giriş yapılmamış')}</td><td>${esc(x.action || '—')}${x.note ? `<small>“${esc(x.note)}”</small>` : ''}</td><td class="adm-err">${esc(x.error || '—')}</td><td>${esc(x.version || '—')}<small>${esc(HOST[x.host] ?? x.host ?? '')}${x.platform ? ' · ' + esc(OS[x.platform] ?? x.platform) : ''}</small></td></tr>`,
+        )
+        .join('') || `<tr><td colspan="5" class="muted">${r.missing ? 'Rapor tablosu henüz oluşturulmamış.' : 'Henüz rapor yok.'}</td></tr>`;
+  }
+  async function openReport(id) {
+    const { report: x } = await api('report', { id });
+    modal.innerHTML = `
+      <button class="adm-x" data-r="close" aria-label="Kapat">×</button>
+      <h2>Hata raporu #${x.id}</h2>
+      <dl class="adm-dl">
+        <dt>Gönderen</dt><dd>${x.email ? `${esc(x.email)} <button class="adm-link" data-r="user">hesabı aç</button>` : 'giriş yapılmamış'}</dd>
+        <dt>Zaman</dt><dd>${dateTime(x.at)} · ${ago(x.at)}</dd>
+        <dt>İşlem</dt><dd>${esc(x.action || '—')}</dd>
+        <dt>Hata</dt><dd class="adm-err">${esc(x.error || '—')}</dd>
+        ${x.note ? `<dt>Açıklama</dt><dd>${esc(x.note)}</dd>` : ''}
+        <dt>Sürüm</dt><dd>${esc(x.version || '—')} · ${esc(HOST[x.host] ?? x.host ?? '—')} · ${esc(OS[x.platform] ?? x.platform ?? '—')}</dd>
+        <dt>Bilgisayar</dt><dd>${esc(x.device || '—')}</dd>
+      </dl>
+      <h3>Tanılama raporu</h3>
+      <pre class="adm-pre" id="reportBody">${esc(x.body || '(boş)')}</pre>
+      <div class="adm-actions"><div class="danger"><button class="btn primary sm" data-r="copy">Raporu kopyala</button><button class="btn ghost sm" data-r="delete">Raporu sil</button></div></div>
+      <div class="msg" id="modalMsg"></div>`;
+    overlay.hidden = false;
+    modal.onclick = async (e) => {
+      const a = e.target.closest('[data-r]')?.dataset.r;
+      if (!a) return;
+      if (a === 'close') return close();
+      if (a === 'user') return guard(openUser)(x.email);
+      if (a === 'copy') {
+        const text = `Gönderen: ${x.email ?? 'giriş yapılmamış'}\nİşlem: ${x.action || '-'}\nHata: ${x.error || '-'}${x.note ? `\nAçıklama: ${x.note}` : ''}\n\n${x.body || ''}`;
+        try {
+          await navigator.clipboard.writeText(text);
+          show($('#modalMsg'), 'Kopyalandı.', 'ok');
+        } catch {
+          show($('#modalMsg'), 'Kopyalanamadı; metni seçip kopyalayın.');
+        }
+        return;
+      }
+      if (a === 'delete') {
+        if (!confirm('Bu rapor silinsin mi?')) return;
+        try {
+          await api('report-delete', { id: x.id });
+          close();
+          await loadReports();
+        } catch (err) {
+          show($('#modalMsg'), err.message);
+        }
+      }
+    };
+    loadReports().catch(() => {});
+  }
+  $('#reports').addEventListener('click', (e) => {
+    const tr = e.target.closest('tr[data-id]');
+    if (tr) guard(openReport)(Number(tr.dataset.id));
+  });
 
   // ---------- Kullanıcı ayrıntısı ve işlemler ----------
   const overlay = $('#overlay');
@@ -315,7 +390,7 @@
       show($('#gateMsg'), err.message);
     }
   });
-  const loadAll = () => Promise.all([loadStats(), loadUsers(), loadEvents(), loadGate()]);
+  const loadAll = () => Promise.all([loadStats(), loadUsers(), loadEvents(), loadGate(), loadReports()]);
   $('#refresh').addEventListener('click', guard(loadAll));
   if (key) {
     loadAll()
