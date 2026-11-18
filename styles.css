@@ -676,6 +676,7 @@ footer nav a:hover { color: #fff; }
 .adm-modal h2 { font-size: 20px; padding-right: 36px; word-break: break-all; }
 .adm-modal h3 { font-family: 'Poppins'; font-size: 14px; margin: 22px 0 8px; color: var(--ink-2); }
 .adm-modal p { margin-top: 8px; }
+.adm-pill.admin { background: rgba(239, 68, 68, 0.18); color: #fecaca; border: 1px solid rgba(248, 113, 113, 0.5); }
 .adm-badge { display: inline-block; min-width: 20px; margin-left: 8px; padding: 1px 6px; border-radius: 999px; background: #f43f5e; color: #fff; font-size: 12px; font-weight: 700; text-align: center; }
 .adm-table tr.new td { color: #fff; font-weight: 600; }
 .adm-table tr.new td:first-child { box-shadow: inset 3px 0 0 #f43f5e; }

@@ -26,7 +26,7 @@
     return d > 0 ? `${d} gün kaldı` : `${-d} gün önce bitti`;
   };
   const PLAN = { pro: 'Pro', trial: 'Deneme', expired: 'Süresi bitti' };
-  const EVENT = { kayit: 'Kayıt', 'satin-alma': 'Satın alma', yenileme: 'Yenileme', iptal: 'İptal', 'odeme-gecikti': 'Ödeme gecikti', 'admin-sure': 'Elle Pro süresi', 'admin-deneme': 'Deneme ayarlandı', 'admin-bitir': 'Erişim bitirildi', 'admin-cihaz': 'Cihaz çıkarıldı', 'admin-sil': 'Hesap silindi', 'deneme-tekrar': 'Deneme reddedildi (aynı bilgisayar)', 'deneme-yok': 'Deneme verilmedi (aynı ağ)', 'admin-kayit': 'Kayıt kipi değişti', 'admin-kurucu': 'İlk kullanıcı rozeti', 'izin-ileti': 'Ticari ileti izni verildi', 'izin-geri': 'Ticari ileti izni geri alındı', 'sozlesme-onay': 'Ödeme öncesi sözleşme onayı', 'hata-raporu': 'Hata raporu gönderdi' };
+  const EVENT = { kayit: 'Kayıt', 'satin-alma': 'Satın alma', yenileme: 'Yenileme', iptal: 'İptal', 'odeme-gecikti': 'Ödeme gecikti', 'admin-sure': 'Elle Pro süresi', 'admin-deneme': 'Deneme ayarlandı', 'admin-bitir': 'Erişim bitirildi', 'admin-cihaz': 'Cihaz çıkarıldı', 'admin-sil': 'Hesap silindi', 'deneme-tekrar': 'Deneme reddedildi (aynı bilgisayar)', 'deneme-yok': 'Deneme verilmedi (aynı ağ)', 'admin-kayit': 'Kayıt kipi değişti', 'admin-kurucu': 'İlk kullanıcı rozeti', 'izin-ileti': 'Ticari ileti izni verildi', 'izin-geri': 'Ticari ileti izni geri alındı', 'sozlesme-onay': 'Ödeme öncesi sözleşme onayı', 'hata-raporu': 'Hata raporu gönderdi', 'admin-yonetici': 'Eklenti yöneticiliği' };
   const PERIOD = { aylik: 'Aylık', yillik: 'Yıllık' };
 
   const show = (el, text, kind = 'err') => {
@@ -127,7 +127,7 @@
   let total = 0;
   let plan = 'all';
   const row = (u) =>
-    `<tr data-email="${esc(u.email)}"><td class="em">${esc(u.email)}${u.founder ? ` <span class="adm-pill founder" title="İlk kullanıcı">★ #${u.founder}</span>` : ''}${u.note ? ' <span class="adm-note" title="' + esc(u.note) + '">not</span>' : ''}</td><td><span class="adm-pill ${u.plan}">${PLAN[u.plan]}${u.plan === 'pro' && u.subPeriod ? ' · ' + PERIOD[u.subPeriod] : ''}</span></td><td>${date(u.until)}<small>${left(u.until)}</small></td><td>${date(u.createdAt)}</td><td>${u.subStartedAt ? date(u.subStartedAt) : '—'}</td><td>${u.devices}</td><td>${ago(u.lastSeen)}</td></tr>`;
+    `<tr data-email="${esc(u.email)}"><td class="em">${esc(u.email)}${u.admin ? ' <span class="adm-pill admin" title="Eklenti yöneticisi">Yönetici</span>' : ''}${u.founder ? ` <span class="adm-pill founder" title="İlk kullanıcı">★ #${u.founder}</span>` : ''}${u.note ? ' <span class="adm-note" title="' + esc(u.note) + '">not</span>' : ''}</td><td><span class="adm-pill ${u.plan}">${PLAN[u.plan]}${u.plan === 'pro' && u.subPeriod ? ' · ' + PERIOD[u.subPeriod] : ''}</span></td><td>${date(u.until)}<small>${left(u.until)}</small></td><td>${date(u.createdAt)}</td><td>${u.subStartedAt ? date(u.subStartedAt) : '—'}</td><td>${u.devices}</td><td>${ago(u.lastSeen)}</td></tr>`;
   async function loadUsers(reset = true) {
     const r = await api('users', { search: $('#search').value, plan, offset: reset ? 0 : users.length, limit: 50 });
     users = reset ? r.users : [...users, ...r.users];
@@ -283,7 +283,7 @@
     modal.innerHTML = `
       <button class="adm-x" data-a="close" aria-label="Kapat">×</button>
       <h2>${esc(u.email)}</h2>
-      <p><span class="adm-pill ${u.plan}">${PLAN[u.plan]}${u.plan === 'pro' && u.subPeriod ? ' · ' + PERIOD[u.subPeriod] : ''}</span> <span class="muted">${date(u.until)} · ${left(u.until)}</span>${u.founder ? ` <span class="adm-pill founder">★ İlk Kullanıcı #${u.founder}</span>` : ''}</p>
+      <p><span class="adm-pill ${u.plan}">${PLAN[u.plan]}${u.plan === 'pro' && u.subPeriod ? ' · ' + PERIOD[u.subPeriod] : ''}</span> <span class="muted">${date(u.until)} · ${left(u.until)}</span>${u.admin ? ' <span class="adm-pill admin">Yönetici</span>' : ''}${u.founder ? ` <span class="adm-pill founder">★ İlk Kullanıcı #${u.founder}</span>` : ''}</p>
       <dl class="adm-dl">
         <dt>Kayıt</dt><dd>${dateTime(u.createdAt)}</dd>
         <dt>İlk satın alma</dt><dd>${u.subStartedAt ? dateTime(u.subStartedAt) : '—'}</dd>
@@ -301,6 +301,7 @@
         <label>Pro süresi ver <input type="number" id="grantDays" min="1" value="30"> gün <button class="btn primary sm" data-a="grant">Ver</button></label>
         <label>Denemeyi bugünden <input type="number" id="trialDays" min="0" value="7"> gün yap <button class="btn ghost sm" data-a="trial">Ayarla</button></label>
         <label class="wide">İlk kullanıcı rozeti (ilk 20 hesap; eklentide altın etiket) <button class="btn ghost sm" data-a="founder" data-on="${u.founder ? '' : '1'}">${u.founder ? 'Rozeti al' : 'Rozet ver'}</button></label>
+        <label class="wide">Eklenti yöneticisi (kullanıcılara kapalı ekranları ve test turunu görür; ödeme durumu değişmez) <button class="btn ghost sm" data-a="role" data-on="${u.admin ? '' : '1'}">${u.admin ? 'Yöneticiliği al' : 'Yönetici yap'}</button></label>
         <label class="wide">Not <input type="text" id="note" maxlength="500" value="${esc(u.note)}" placeholder="Yalnızca siz görürsünüz"> <button class="btn ghost sm" data-a="note">Kaydet</button></label>
         <div class="danger"><button class="btn ghost sm" data-a="expire">Erişimi şimdi bitir</button><button class="btn ghost sm" data-a="delete">Hesabı sil</button></div>
       </div>
@@ -319,6 +320,7 @@
         else if (a === 'trial') await api('trial', { email, days: Number($('#trialDays').value) });
         else if (a === 'note') await api('note', { email, note: $('#note').value });
         else if (a === 'founder') await api('founder', { email, on: Boolean(e.target.dataset.on) });
+        else if (a === 'role') await api('role', { email, on: Boolean(e.target.dataset.on) });
         else if (a === 'device') await api('device-remove', { email, deviceId: e.target.dataset.id });
         else if (a === 'expire') {
           if (!confirm(`${email} hesabının erişimi şimdi bitsin mi?`)) return;
