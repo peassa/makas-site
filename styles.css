@@ -809,3 +809,9 @@ footer nav a:hover { color: #fff; }
 .pay-state.agree .pay-ic { display: grid; }
 .legal mark.eksik { background: rgba(250, 204, 21, 0.25); color: #fde68a; padding: 0 4px; border-radius: 4px; }
 .pay-state .legal-note { margin: 10px 0 0 28px; max-width: none; font-size: 12.5px; text-align: left; }
+
+/* "Yakında" rozeti: henüz kullanıcılara açılmamış araçlar */
+.soon { display: inline-block; vertical-align: middle; margin-left: 10px; padding: 3px 10px; border-radius: 999px; border: 1px solid rgba(251, 191, 36, 0.45); background: rgba(251, 191, 36, 0.14); color: #fde68a; font: 700 10.5px/1.5 'Poppins', system-ui, sans-serif; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; }
+.card.is-soon > .ib { opacity: 0.75; }
+.card h4 .soon { position: relative; top: -2px; }
+.fan figcaption .soon { margin-left: 8px; }

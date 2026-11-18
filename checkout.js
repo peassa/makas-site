@@ -12,7 +12,7 @@
   const q = new URLSearchParams(location.search);
   const ticket = q.get('t');
   const ptxn = q.get('_ptxn');
-  const P = C.PRICES ?? { currency: '$', monthly: 12, yearly: 96 };
+  const P = C.PRICES ?? { currency: '$', monthly: 6, yearly: 48 };
   const PADDLE_JS = 'https://cdn.paddle.com/paddle/v2/paddle.js';
 
   let period = /^(aylik|monthly)$/.test(q.get('p') || '') ? 'monthly' : 'yearly';

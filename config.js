@@ -5,8 +5,8 @@ window.MAKAS = {
   // Fiyatlar: yalnızca gösterim içindir; gerçek tutarı ödeme sağlayıcısı (Paddle) belirler.
   PRICES: {
     currency: '$',
-    monthly: 12, // aylık plan, ay başına
-    yearly: 96, // yıllık plan, yıl başına
+    monthly: 6, // aylık plan, ay başına
+    yearly: 48, // yıllık plan, yıl başına
   },
   // Kayıt kipi sunucudan okunur (yönetici paneli > Kayıtlar): 'acik' herkes, 'davet' davet koduyla, 'kapali' kimse.
   // Sunucu yanıt vermezse ya da eski sürümse bu değer geçerlidir. Kaydı yeniden kapatmak için 'kapali' yazın.

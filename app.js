@@ -859,7 +859,7 @@
   // ---------- Fiyat ----------
   const bill = $('#bill');
   if (bill) {
-    const P = C.PRICES ?? { currency: '$', monthly: 12, yearly: 96 };
+    const P = C.PRICES ?? { currency: '$', monthly: 6, yearly: 48 };
     let period = 'yearly';
     const fmt = (n) => `${P.currency}${Number.isInteger(n) ? n : n.toFixed(2)}`;
     const save = Math.round((1 - P.yearly / (P.monthly * 12)) * 100);

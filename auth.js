@@ -261,7 +261,7 @@
     if (!demo && !session.get()) return void (location.href = 'login.html');
     const q = new URLSearchParams(location.search);
     const DAY = 86400000;
-    const P = C.PRICES ?? { currency: '$', monthly: 12, yearly: 96 };
+    const P = C.PRICES ?? { currency: '$', monthly: 6, yearly: 48 };
     const money = (n) => `${P.currency}${Number.isInteger(n) ? n : n.toFixed(2)}`;
     const fmtDate = (ms) => new Date(ms).toLocaleDateString(tr() ? 'tr-TR' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric' });
     let period = q.get('buy') === 'monthly' ? 'monthly' : 'yearly';
