@@ -62,7 +62,7 @@ window.MAKAS_TR = {
  "b.sfx.t": "SFX kütüphanesi",
  "b.shorts.d": "En iyi anları bulur, 9:16’ya çevirir.",
  "b.shorts.t": "Shorts ve bölümler",
- "b.sync.d": "Çekim klasörünü gösterin. Kameralar ve ses kayıtları sese göre hizalanır, tek sekansa dizilir.",
+ "b.sync.d": "Çekim klasörünü gösterin. Kameralar ve ses kayıtları sese göre tek sekansta hizalanır; uzun çekimlerdeki saat kayması da düzeltilir.",
  "b.sync.t": "Sesle eşitleme",
  "b.upd.d": "Yeni araçlar ve düzeltmeler panelin içinden gelir. Yeniden kurmak gerekmez.",
  "b.upd.t": "Sürekli gelişiyor",
