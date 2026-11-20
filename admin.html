@@ -59,7 +59,7 @@
 <div class="adm-days" id="days"></div>
 </section>
 
-<div class="adm-tabs" id="tabs"><button class="on" data-t="users">Kullanıcılar</button><button data-t="events">Olaylar ve satın almalar</button><button data-t="reports">Hata raporları<span class="adm-badge" id="reportsNew" hidden></span></button></div>
+<div class="adm-tabs" id="tabs"><button class="on" data-t="users">Kullanıcılar</button><button data-t="events">Olaylar ve satın almalar</button><button data-t="reports">Hata raporları<span class="adm-badge" id="reportsNew" hidden></span></button><button data-t="log">Güncellemeler</button></div>
 
 <!-- Kullanıcılar -->
 <section class="adm-card" id="tab-users">
@@ -83,6 +83,13 @@
 <section class="adm-card" id="tab-reports" hidden>
 <div class="adm-head"><h2>Hata raporları</h2><span class="muted" id="reportsNote">Kullanıcı eklentide “Bize gönder”e basınca burada görünür. Satıra tıklayınca raporun tamamı açılır.</span></div>
 <div class="adm-scroll"><table class="adm-table"><thead><tr><th>Zaman</th><th>Gönderen</th><th>İşlem</th><th>Hata</th><th>Sürüm</th></tr></thead><tbody id="reports"></tbody></table></div>
+</section>
+
+<!-- Güncelleme günlüğü: ne eklendi, düzeldi, değişti, çıkarıldı. Yalnızca yönetici görür (sunucu yönetici anahtarı ister). -->
+<section class="adm-card" id="tab-log" hidden>
+<div class="adm-head"><h2>Güncelleme günlüğü</h2><span class="muted" id="logNote"></span></div>
+<div class="adm-tools"><div class="chips" id="logFilter"><button class="on" data-a="">Tümü</button><button data-a="eklenti">Eklenti</button><button data-a="site">Site</button><button data-a="sunucu">Sunucu</button><button data-a="yonetim">Yönetim paneli</button></div></div>
+<div class="adm-log" id="log"></div>
 </section>
 </div>
 </main>

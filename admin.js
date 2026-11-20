@@ -196,7 +196,7 @@
   for (const b of $$('#tabs button'))
     b.addEventListener('click', () => {
       $$('#tabs button').forEach((x) => x.classList.toggle('on', x === b));
-      for (const t of ['users', 'events', 'reports']) $(`#tab-${t}`).hidden = b.dataset.t !== t;
+      for (const t of ['users', 'events', 'reports', 'log']) $(`#tab-${t}`).hidden = b.dataset.t !== t;
     });
 
   // ---------- Hata raporları (eklentideki "Bize gönder") ----------
@@ -427,7 +427,45 @@
     }
   });
 
-  const loadAll = () => Promise.all([loadStats(), loadUsers(), loadEvents(), loadGate(), loadReports()]);
+  // ---------- Güncelleme günlüğü: yalnızca yönetici görür ----------
+  const KIND = { eklendi: 'Eklendi', duzeltildi: 'Düzeltildi', degisti: 'Değişti', cikarildi: 'Çıkarıldı' };
+  const AREA = { eklenti: 'Eklenti', site: 'Site', sunucu: 'Sunucu', yonetim: 'Yönetim paneli' };
+  let logEntries = [];
+  let logArea = '';
+  const dayLong = (ms) => new Date(ms).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric', weekday: 'long' });
+  function paintLog() {
+    const days = new Map();
+    for (const e of logEntries) {
+      if (logArea && e.area !== logArea) continue;
+      const k = new Date(e.at).toDateString();
+      if (!days.has(k)) days.set(k, []);
+      days.get(k).push(e);
+    }
+    const row = (e) =>
+      `<div class="adm-log-row"><span><span class="adm-pill lg-${esc(e.kind)}">${esc(KIND[e.kind] ?? e.kind)}</span></span><div><b>${esc(e.title)}</b><small>${esc(AREA[e.area] ?? e.area)}${e.ref ? ` · ${esc(e.ref)}` : ''}</small>${e.detail ? `<p>${esc(e.detail)}</p>` : ''}</div></div>`;
+    $('#log').innerHTML = [...days.values()].map((items) => `<div class="adm-log-day"><h3>${esc(dayLong(items[0].at))}</h3>${items.map(row).join('')}</div>`).join('') || '<p class="muted">Bu bölümde kayıt yok.</p>';
+  }
+  async function loadLog() {
+    try {
+      const r = await api('changelog');
+      logEntries = r.entries ?? [];
+      $('#logNote').textContent = r.missing ? 'Günlük tablosu henüz oluşturulmamış' : `${logEntries.length} kayıt · yalnızca siz görürsünüz`;
+    } catch (err) {
+      if (err.status === 403) throw err;
+      // Eski sunucu kodunda bu uç yok
+      logEntries = [];
+      $('#logNote').textContent = 'Sunucu kodu güncellenince etkinleşir';
+    }
+    paintLog();
+  }
+  for (const b of $$('#logFilter button'))
+    b.addEventListener('click', () => {
+      logArea = b.dataset.a;
+      $$('#logFilter button').forEach((x) => x.classList.toggle('on', x === b));
+      paintLog();
+    });
+
+  const loadAll = () => Promise.all([loadStats(), loadUsers(), loadEvents(), loadGate(), loadReports(), loadLog()]);
   $('#refresh').addEventListener('click', guard(loadAll));
   if (key) {
     loadAll()
