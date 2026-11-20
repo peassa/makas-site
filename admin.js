@@ -118,6 +118,9 @@
       );
     if (s.setup && !s.setup.payments) todo.push('<b>Ödeme kurulu değil.</b> Kullanıcılar satın alamaz; satın alma ve iptal kayıtları boş kalır. (docs/LISANS.md > Paddle)');
     if (s.setup && !s.setup.email) todo.push('<b>E-posta kurulu değil.</b> Kayıtta e-posta onayı istenemiyor (uydurma adreslerle hesap açılabilir) ve “Şifremi unuttum” çalışmıyor. (docs/LISANS.md > E-posta)');
+    const me = s.setup?.mailError;
+    if (me) todo.push(`<b>E-posta gönderilemiyor</b> (son deneme ${ago(me.at)}): kayıt onayı ve “Şifremi unuttum” kodları ulaşmıyor.<br>Servisin yanıtı: <code>${esc(me.detail)}</code><br><b>Yapılacak:</b> ${esc(me.hint)}`);
+    paintMail(s.setup);
     $('#setup').hidden = !todo.length;
     $('#setup').innerHTML = todo.map((t) => `<div>${t}</div>`).join('');
   }
@@ -394,6 +397,36 @@
       show($('#gateMsg'), err.message);
     }
   });
+  // ---------- E-posta gönderimi: durum ve tek tıkla deneme ----------
+  const MAIL = { brevo: 'Brevo', cloudflare: 'Cloudflare Email', resend: 'Resend' };
+  function paintMail(setup) {
+    // Eski sunucu kodu bu bilgiyi vermez
+    if (!setup || !('mailError' in setup)) {
+      $('#mailState').textContent = 'Sunucu kodu güncellenince etkinleşir';
+      $('#mailTest').disabled = true;
+      return;
+    }
+    $('#mailTest').disabled = false;
+    $('#mailState').textContent = !setup.email ? 'Kurulu değil' : `${MAIL[setup.mailProvider] ?? setup.mailProvider} · ${setup.mailError ? 'son gönderim başarısız' : 'sorun görünmüyor'}`;
+  }
+  $('#mailTest').addEventListener('click', async () => {
+    const to = $('#mailTo').value.trim();
+    if (!to) return show($('#mailMsg'), 'Deneme iletisinin gideceği adresi yazın (kendi adresiniz).');
+    $('#mailTest').disabled = true;
+    show($('#mailMsg'), 'Gönderiliyor…', 'info');
+    try {
+      const r = await api('mail-test', { to });
+      if (r.ok) show($('#mailMsg'), `Gönderildi (${MAIL[r.provider] ?? r.provider}, gönderen ${r.from}). Gelen kutunuza ve spam klasörüne bakın; ileti geldiyse kayıt onayı ve şifre sıfırlama da çalışır.`, 'ok');
+      else show($('#mailMsg'), `Gönderilemedi${r.provider ? ` (${MAIL[r.provider] ?? r.provider}, gönderen ${r.from})` : ''}.\nServisin yanıtı: ${r.detail}\n\nYapılacak: ${r.hint}`);
+      loadStats().catch(() => {});
+    } catch (err) {
+      if (err.status === 403) return signOut('Oturum sona erdi; anahtarı yeniden yazın.');
+      show($('#mailMsg'), err.status === 404 ? 'Bu düğme için yeni sunucu kodunu Cloudflare’e yapıştırmanız gerekiyor.' : err.message);
+    } finally {
+      $('#mailTest').disabled = false;
+    }
+  });
+
   const loadAll = () => Promise.all([loadStats(), loadUsers(), loadEvents(), loadGate(), loadReports()]);
   $('#refresh').addEventListener('click', guard(loadAll));
   if (key) {
