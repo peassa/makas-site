@@ -216,7 +216,7 @@
       r.reports
         .map(
           (x) =>
-            `<tr data-id="${x.id}" class="${x.seen ? '' : 'new'}"><td>${dateTime(x.at)}<small>${ago(x.at)}</small></td><td class="em">${esc(x.email ?? 'giriş yapılmamış')}</td><td>${esc(x.action || '—')}${x.note ? `<small>“${esc(x.note)}”</small>` : ''}</td><td class="adm-err">${esc(x.error || '—')}</td><td>${esc(x.version || '—')}<small>${esc(HOST[x.host] ?? x.host ?? '')}${x.platform ? ' · ' + esc(OS[x.platform] ?? x.platform) : ''}</small></td></tr>`,
+            `<tr data-id="${x.id}" class="${x.seen ? '' : 'new'}"><td>${dateTime(x.at)}<small>${ago(x.at)}</small></td><td class="em">${x.email ? esc(x.email) : `${x.claimed_email ? esc(x.claimed_email) : 'giriş yapılmamış'}<small>${x.claimed_email ? 'giriş yapılmamış · ' : ''}${esc(x.ip || '')}${x.country ? ` (${esc(x.country)})` : ''}</small>`}</td><td>${esc(x.action || '—')}${x.note ? `<small>“${esc(x.note)}”</small>` : ''}</td><td class="adm-err">${esc(x.error || '—')}</td><td>${esc(x.version || '—')}<small>${esc(HOST[x.host] ?? x.host ?? '')}${x.platform ? ' · ' + esc(OS[x.platform] ?? x.platform) : ''}</small></td></tr>`,
         )
         .join('') || `<tr><td colspan="5" class="muted">${r.missing ? 'Rapor tablosu henüz oluşturulmamış.' : 'Henüz rapor yok.'}</td></tr>`;
   }
@@ -226,7 +226,8 @@
       <button class="adm-x" data-r="close" aria-label="Kapat">×</button>
       <h2>Hata raporu #${x.id}</h2>
       <dl class="adm-dl">
-        <dt>Gönderen</dt><dd>${x.email ? `${esc(x.email)} <button class="adm-link" data-r="user">hesabı aç</button>` : 'giriş yapılmamış'}</dd>
+        <dt>Gönderen</dt><dd>${x.email ? `${esc(x.email)} <button class="adm-link" data-r="user">hesabı aç</button>` : `giriş yapılmamış${x.claimed_email ? ` · yazdığı e-posta: <b>${esc(x.claimed_email)}</b> (doğrulanmamış) <button class="adm-link" data-r="claimed">bu adresle hesap var mı?</button>` : ''}`}</dd>
+        ${x.email ? '' : `<dt>Kimlik</dt><dd>IP ${esc(x.ip || '—')}${x.country ? ` (${esc(x.country)})` : ''}${x.machine ? ` · cihaz ${esc(String(x.machine).slice(0, 12))}` : ''}</dd>`}
         <dt>Zaman</dt><dd>${dateTime(x.at)} · ${ago(x.at)}</dd>
         <dt>İşlem</dt><dd>${esc(x.action || '—')}</dd>
         <dt>Hata</dt><dd class="adm-err">${esc(x.error || '—')}</dd>
@@ -244,8 +245,9 @@
       if (!a) return;
       if (a === 'close') return close();
       if (a === 'user') return guard(openUser)(x.email);
+      if (a === 'claimed') return guard(openUser)(x.claimed_email);
       if (a === 'copy') {
-        const text = `Gönderen: ${x.email ?? 'giriş yapılmamış'}\nİşlem: ${x.action || '-'}\nHata: ${x.error || '-'}${x.note ? `\nAçıklama: ${x.note}` : ''}\n\n${x.body || ''}`;
+        const text = `Gönderen: ${x.email ?? `giriş yapılmamış${x.claimed_email ? ` (yazdığı e-posta: ${x.claimed_email})` : ''} · IP ${x.ip || '-'}${x.country ? ` (${x.country})` : ''}`}\nİşlem: ${x.action || '-'}\nHata: ${x.error || '-'}${x.note ? `\nAçıklama: ${x.note}` : ''}\n\n${x.body || ''}`;
         try {
           await navigator.clipboard.writeText(text);
           show($('#modalMsg'), 'Kopyalandı.', 'ok');
