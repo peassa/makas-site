@@ -51,7 +51,17 @@
     b.style.opacity = on ? 0.6 : 1;
   };
   const validEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
-  const lang = () => (tr() ? 'tr' : 'en');
+  /**
+   * E-postanın dili. Site yalnızca Türkçe ve İngilizce; e-postalar ise 17 dilde yazılabiliyor.
+   *   site Türkçe  → Türkçe
+   *   site İngilizce → tarayıcının dili (ör. "de-DE"); sunucu desteklemediği dilde İngilizce yazar.
+   *     Tarayıcısı Türkçe olup siteyi İngilizceye çeviren kişi İngilizceyi seçmiştir: İngilizce gider.
+   */
+  const mailLang = () => {
+    if (tr()) return 'tr';
+    const b = String((navigator.languages && navigator.languages[0]) || navigator.language || 'en');
+    return /^tr\b/i.test(b) ? 'en' : b.slice(0, 35);
+  };
 
   // --- Kayıt ---
   // Kapalı test: kayıt kipi sunucudan okunur (açık / davet koduyla / kapalı); okunamazsa config.js'teki geçerlidir
@@ -151,7 +161,7 @@
     $('#verifyResend').onclick = async (e) => {
       e.preventDefault();
       try {
-        await post('/web/register/resend', { email: pendingEmail, lang: lang() });
+        await post('/web/register/resend', { email: pendingEmail, lang: mailLang() });
         msg(tr() ? 'Yeni kod gönderildi. E-postanızı kontrol edin.' : 'A new code is on its way. Check your email.', 'ok');
       } catch (err) {
         msg(err.message);
@@ -185,7 +195,7 @@
     busy(f, true);
     try {
       // "Hesap oluştur"a basmak koşulların kabulüdür (formun altında yazar); ileti izni isteğe bağlı kutudan gelir
-      const r = await post('/web/register', { email, password: f.password.value, lang: lang(), hp: f.makas_hp?.value ?? '', invite, terms: true, marketing: Boolean(f.marketing?.checked) });
+      const r = await post('/web/register', { email, password: f.password.value, lang: mailLang(), hp: f.makas_hp?.value ?? '', invite, terms: true, marketing: Boolean(f.marketing?.checked) });
       if (r.verify) {
         // Hesap henüz açılmadı: e-postadaki kod bekleniyor
         const q = new URLSearchParams(location.search);
@@ -234,7 +244,7 @@
       busy(reset, true);
       try {
         if (step === 1) {
-          await post('/web/reset/start', { email, lang: lang() });
+          await post('/web/reset/start', { email, lang: mailLang() });
           step = 2;
           $('#resetStep2').hidden = false;
           $('#resetBtn').textContent = tr() ? 'Şifreyi değiştir' : 'Change password';
