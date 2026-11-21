@@ -32,6 +32,7 @@ window.MAKAS_TR = {
  "au.mkt.end": " kapsamında onay veriyorum. (İsteğe bağlı)",
  "au.mkt.link": "Açık Rıza Metni",
  "au.newpass": "Yeni şifre",
+ "au.newpass2": "Yeni şifre (tekrar)",
  "au.noacc": "Makas’ta yeni misiniz?",
  "au.pass": "Şifre",
  "au.pass.ph": "En az 8 karakter",

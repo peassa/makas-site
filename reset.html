@@ -44,8 +44,9 @@
 <h1 data-i18n="au.reset.h">Reset your password.</h1><p class="lead" data-i18n="au.reset.p">We will email you a 6-digit code.</p>
 <label class="field"><span data-i18n="au.email">Email</span><input type="email" name="email" autocomplete="email" required placeholder="you@studio.com"></label>
 <div id="resetStep2" hidden>
-<label class="field"><span data-i18n="au.code">Code from the email</span><input name="code" inputmode="numeric" maxlength="6" placeholder="••••••"></label>
+<label class="field"><span data-i18n="au.code">Code from the email</span><input name="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="••••••"></label>
 <label class="field"><span data-i18n="au.newpass">New password</span><input type="password" name="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters" data-i18n-ph="au.pass.ph"></label>
+<label class="field"><span data-i18n="au.newpass2">Repeat new password</span><input type="password" name="password2" autocomplete="new-password" minlength="8" placeholder="••••••••"></label>
 </div>
 <div class="msg" id="msg"></div>
 <button class="btn primary block" type="submit"><span id="resetBtn" data-i18n="au.reset.btn">Send code</span><svg class="ic" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /> </svg></button>

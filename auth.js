@@ -51,6 +51,33 @@
     b.style.opacity = on ? 0.6 : 1;
   };
   const validEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+
+  // --- Şifreyi göster / gizle: kişi ne yazdığını görebilsin (giriş, kayıt ve şifre sıfırlama) ---
+  for (const input of document.querySelectorAll('.field input[type="password"]')) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'pw-toggle';
+    const paint = () => {
+      const shown = input.type === 'text';
+      b.textContent = tr() ? (shown ? 'Gizle' : 'Göster') : shown ? 'Hide' : 'Show';
+      b.setAttribute('aria-label', tr() ? (shown ? 'Şifreyi gizle' : 'Şifreyi göster') : shown ? 'Hide password' : 'Show password');
+      b.setAttribute('aria-pressed', String(shown));
+    };
+    b.addEventListener('click', () => {
+      input.type = input.type === 'password' ? 'text' : 'password';
+      paint();
+      input.focus();
+    });
+    // Gönderilirken yeniden gizlenir (tarayıcının şifre kaydı düzgün çalışsın, ekranda açık kalmasın)
+    input.form?.addEventListener('submit', () => {
+      input.type = 'password';
+      paint();
+    });
+    document.addEventListener('makas-lang', paint);
+    input.parentElement.classList.add('has-toggle');
+    input.after(b);
+    paint();
+  }
   /**
    * E-postanın dili. Site yalnızca Türkçe ve İngilizce; e-postalar ise 17 dilde yazılabiliyor.
    *   site Türkçe  → Türkçe
@@ -251,6 +278,8 @@
           msg(tr() ? 'Kod gönderildi. E-postanızı kontrol edin.' : 'Code sent. Check your email.', 'ok');
         } else {
           if (reset.password.value.length < 8) return msg(tr() ? 'Şifre en az 8 karakter olmalı.' : 'Password must be at least 8 characters.');
+          // Şifre gizli yazılır: yanlış yazılan şifre fark edilmeden kaydedilirse kişi bir daha giremez
+          if (reset.password2 && reset.password.value !== reset.password2.value) return msg(tr() ? 'Şifreler aynı değil.' : 'Passwords do not match.');
           const r = await post('/web/reset/finish', { email, code: reset.code.value.trim(), password: reset.password.value });
           session.set(r.session);
           remember(r);
